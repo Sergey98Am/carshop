@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form class="login" method="POST" action="{{ route('jwtLogin') }}">
+                    <form class="login" method="POST">
                
 
                         <div class="form-group row">
