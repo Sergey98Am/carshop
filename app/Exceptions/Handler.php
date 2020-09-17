@@ -52,6 +52,8 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
+    
+    //middleware JWT
     public function render($request, Throwable $exception)
     {
         if($exception instanceOf TokenInvalidException){
