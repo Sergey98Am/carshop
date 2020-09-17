@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -14,3 +15,11 @@ Route::group([
     Route::post('payload', 'AuthController@payload');
 
 });
+
+
+Route::group(['middleware' => ['jwt']],
+     function () { 
+         Route::get('car', 'CarController@index');
+});
+
+
