@@ -29,11 +29,13 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-    	$input = $request->all();
-    	if (!$token = JWTAuth::attempt($input)) {
-            return response()->json(['result' => 'wrong email or password.']);
+        $credentials = $request->only('email', 'password');
+
+        if ($token = $this->guard()->attempt($credentials)) {
+            $user = $this->me();
+            return response()->json(['result' => $token, 'user' => $user]);
         }
-        	return response()->json(['result' => $token]);
+
     }
     /**
      * Get the authenticated User

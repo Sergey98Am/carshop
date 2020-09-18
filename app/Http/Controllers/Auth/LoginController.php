@@ -40,8 +40,9 @@ class LoginController extends Controller
     }
 
     protected function guard()
-{
-    // specify the guard that should be used for login attempts
-    return Auth::guard('web');
-}
+    {
+        // specify the guard that should be used for login attempts
+        return Auth::guard('web');
+    }
+
 }
