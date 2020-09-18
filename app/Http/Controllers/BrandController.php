@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use Illuminate\Http\Request;
-use App\Models\Car;
-use JWTAuth;
 use Validator;
 
-class CarController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        return response()->json(['cars' => []]);
+        //
     }
 
     /**
@@ -40,7 +39,7 @@ class CarController extends Controller
         $input = $request->except('_token');
 
         $validator = Validator::make($request->all(), [
-           'name' => 'required|min:2|max:255|unique:cars,name,'
+           'name' => 'required|min:2|max:255|unique:brands,name,'
        ]);
        if($validator->fails()){
            return response()->json($validator->errors()->toJson(), 400);
@@ -48,19 +47,18 @@ class CarController extends Controller
 
        // $validated = $request->validated();
 
-       $car = new Car();
-       $car->fill($input);
-       $car->save();
+       $brand = new Brand();
+       $brand->fill($input);
+       $brand->save();
 
-       return response()->json(['name' => $car->name.':is Created']);
-        // return redirect()->route('car.index')->with('message','Success!');
-
+       return response()->json(['name' => $brand->name.':is Created']);
+        // return redirect()->route('brand.index')->with('message','Success!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -71,7 +69,7 @@ class CarController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -83,7 +81,7 @@ class CarController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -91,7 +89,7 @@ class CarController extends Controller
         $input = $request->except('_token','_method','id');
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:cars,name,'.$id
+            'name' => 'required|min:2|max:255|unique:brands,name,'.$id
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -99,23 +97,23 @@ class CarController extends Controller
 
         // $validated = $request->validated();
 
-        $car = Car::find($id);
-        $car->fill($input);
-        $car->update();
+        $brand = Brand::find($id);
+        $brand->fill($input);
+        $brand->update();
 
-        return response()->json(['name' => $car->name.':is Updated']);
-        // return redirect()->route('car.index')->with('message','Success!');
+        return response()->json(['name' => $brand->name.':is Updated']);
+        // return redirect()->route('brand.index')->with('message','Success!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $destroy = Car::find($id);
+        $destroy = Brand::find($id);
         $destroy->delete();
 
         return response()->json(['name' => $destroy->name.':is Deleted']);
