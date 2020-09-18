@@ -2,22 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'auth'
-], function () {
-
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::get('me', 'AuthController@me');
-    Route::post('payload', 'AuthController@payload');
 
 });
-Route::group(['middleware' => ['jwt']],
-     function () { 
-         Route::get('car', 'CarController@index');
-         Route::get('logout', 'AuthController@logout');
+Route::middleware('jwt')->group(function () {
+    Route::get('car', 'CarController@index');
+    Route::get('logout', 'AuthController@logout');
+    Route::resource('/category','CategoryController');
+    Route::resource('/car','CarController');
+    Route::resource('/brand','BrandController');
 });
 
 
