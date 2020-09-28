@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    <p>Login User</p>
     {{-- <div class="col-8 offset-2">
         @if(session('message'))
         <div class="alert alert-success">{{ session('message') }}</div>

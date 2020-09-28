@@ -7,9 +7,11 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Country;
 use Validator;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -48,17 +50,22 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if ($token = JWTAuth::attempt($credentials)) {
-            return response()->json(['token' => $token], 401);
+        if ($token =  JWTAuth::attempt($credentials)) {
+            return response()->json(['token' => $token,'user'=> JWTAuth::user()]);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized']);
     }
+
+    // public function get_user_details(Request $request)
+    // {
+    // 	return JWTAuth::user();
+
+    // }
 
     public function logout()
     {
         JWTAuth::invalidate();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -67,7 +74,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
+
 }
