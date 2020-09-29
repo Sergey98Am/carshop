@@ -15,7 +15,7 @@ Route::middleware('jwt')->group(function () {
     Route::get('car', 'CarController@index');
     Route::get('logout', 'AuthController@logout');
     Route::resource('/category','CategoryController');
-    Route::resource('/car','CarController');
+    Route::resource('/cars','CarController');
     Route::resource('/brand','BrandController');
 });
 

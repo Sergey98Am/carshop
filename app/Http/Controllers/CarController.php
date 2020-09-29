@@ -16,7 +16,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        return response()->json(['cars' => []]);
+        $cars = Car::all();
+        return response()->json(['cars' => $cars]);
     }
 
     /**
@@ -52,7 +53,7 @@ class CarController extends Controller
        $car->fill($input);
        $car->save();
 
-       return response()->json(['name' => $car->name.':is Created']);
+       return response()->json(['name' => $car->name, 'message' => 'Car successfully created']);
         // return redirect()->route('car.index')->with('message','Success!');
 
     }
@@ -103,7 +104,7 @@ class CarController extends Controller
         $car->fill($input);
         $car->update();
 
-        return response()->json(['name' => $car->name.':is Updated']);
+        return response()->json(['name' => $car->name, 'message' => 'Car successfully updated']);
         // return redirect()->route('car.index')->with('message','Success!');
     }
 
@@ -118,7 +119,7 @@ class CarController extends Controller
         $destroy = Car::find($id);
         $destroy->delete();
 
-        return response()->json(['name' => $destroy->name.':is Deleted']);
+        return response()->json(['name' => $destroy->name, 'message' => 'Car successfully deleted']);
         // return redirect()->route('category.index')->with('message','Success!');
     }
 }
