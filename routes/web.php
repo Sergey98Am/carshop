@@ -39,15 +39,18 @@ Auth::routes();
 //     Route::get('/admin_comments/{id}', 'AllCommentsController@AdminComments')->name('adminComments');
 // });
 
-Route::middleware('auth:web')->group(function () {
+// Route::middleware('auth:web')->group(function () {
   
-    Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::resource('/post','PostController');
-    Route::resource('/category','CategoryController')->except(['show']);
    
-});
+//     Route::resource('/post','PostController');
+//     Route::resource('/category','CategoryController')->except(['show']);
+   
+// });
+// Route::get('/profile', 'AuthController@profile');
 
 
+
+Route::get('/profile', 'ProfileController@index');
 
 Auth::routes();
 

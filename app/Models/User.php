@@ -52,6 +52,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo('App\Models\Country');
     }
 
+    public function orders(){
+        return $this->belongsTo('App\Models\Order');
+    }
+
     // Rest omitted for brevity
 
     /**
