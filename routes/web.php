@@ -50,7 +50,7 @@ Auth::routes();
 
 
 
-Route::get('/profile', 'ProfileController@index');
+// Route::get('/profile', 'ProfileController@index');
 
 Auth::routes();
 

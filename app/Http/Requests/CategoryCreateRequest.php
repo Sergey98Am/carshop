@@ -23,16 +23,8 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        if($this->method() == 'POST'){
-            return [
-                'title' => 'required|min:2|max:255|unique:categories,title,'
-            ];
-        }elseif ($this->method() == 'PUT') {
-            $id = $this->request->get('id');
-            return [
-                'title' => 'required|min:2|max:255|unique:categories,title,'.$id
-            ];
-        }
-        
+        return [
+            'name' => 'required|min:2|max:255|unique:categories,name'
+        ];
     }
 }
