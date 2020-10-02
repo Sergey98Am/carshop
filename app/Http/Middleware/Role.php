@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
+use JWTAuth;
 
 class Role
 {
@@ -16,9 +16,9 @@ class Role
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->isRole() == 2){
+        if (JWTAuth::check() && JWTAuth::user()->isRole() == 2){
             return $next($request);
         }
-        return redirect('/');
+        return response()->json(['message' => 'You cannot do this'],400);
     }
 }

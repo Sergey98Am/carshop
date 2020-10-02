@@ -8,6 +8,6 @@ use App\Models\Category;
 
 $factory->define(Category::class, function (Faker $faker) {
     return [
-        'title' => $faker->word,
+        'name' => $faker->word,
     ];
 });

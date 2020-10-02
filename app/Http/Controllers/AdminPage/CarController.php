@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminPage;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use JWTAuth;
@@ -41,7 +42,14 @@ class CarController extends Controller
         $input = $request->except('_token');
 
         $validator = Validator::make($request->all(), [
-           'name' => 'required|min:2|max:255|unique:cars,name,'
+           'name' => 'required|min:2|max:255|unique:cars,name',
+           'price' => 'required',
+           'condition' => 'required',
+           'year' => 'required',
+           'color' => 'required',
+           'speed' => 'required',
+           'category_id' => 'exists:categories,id',
+           'brand_id' => 'exists:brands,id'
        ]);
        if($validator->fails()){
            return response()->json($validator->errors()->toJson(), 400);
@@ -53,7 +61,7 @@ class CarController extends Controller
        $car->fill($input);
        $car->save();
 
-       return response()->json(['name' => $car->name, 'message' => 'Car successfully created']);
+       return response()->json(['message' => 'Car successfully created']);
         // return redirect()->route('car.index')->with('message','Success!');
 
     }
@@ -92,7 +100,14 @@ class CarController extends Controller
         $input = $request->except('_token','_method','id');
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:cars,name,'.$id
+            'name' => 'required|min:2|max:255|unique:cars,name,'.$id,
+            'price' => 'required',
+            'condition' => 'required',
+            'year' => 'required',
+            'color' => 'required',
+            'speed' => 'required',
+            'category_id' => 'exists:categories,id',
+            'brand_id' => 'exists:brands,id'
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -104,7 +119,7 @@ class CarController extends Controller
         $car->fill($input);
         $car->update();
 
-        return response()->json(['name' => $car->name, 'message' => 'Car successfully updated']);
+        return response()->json(['message' => 'Car successfully updated']);
         // return redirect()->route('car.index')->with('message','Success!');
     }
 
@@ -119,7 +134,25 @@ class CarController extends Controller
         $destroy = Car::find($id);
         $destroy->delete();
 
-        return response()->json(['name' => $destroy->name, 'message' => 'Car successfully deleted']);
+        return response()->json(['message' => 'Car successfully deleted']);
         // return redirect()->route('category.index')->with('message','Success!');
+    }
+
+
+    public function uploadImage(Request $request, $id){
+       
+        $validator = Validator::make($request->all(), [
+            'image' => 'mimes:jpeg,jpg,png,gif|required'
+        ]);
+       if($validator->fails()){
+           return response()->json($validator->errors()->toJson(), 400);
+       }
+            $car = Car::find($id);
+            $file = $request->file('image');
+            $file_name = time().$file->getClientOriginalName();
+            $file->move(public_path().'/images/',$file_name);
+            $car->image = $file_name;
+            $car->save();
+            return response()->json(['message' => 'Image successfully created']);
     }
 }

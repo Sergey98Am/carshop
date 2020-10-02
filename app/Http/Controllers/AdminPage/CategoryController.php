@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminPage;
 
-// use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
@@ -15,9 +16,9 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::OrderBy('id','desc')->paginate(6);
+        $categories = Category::OrderBy('id','desc')->get();
 
-        return view('category', compact('categories'));
+        return response()->json(['categories' => $categories]);
     }
 
     public function create()
@@ -30,7 +31,7 @@ class CategoryController extends Controller
         $input = $request->except('_token');
 
          $validator = Validator::make($request->all(), [
-            'title' => 'required|min:2|max:255|unique:categories,title,'
+            'name' => 'required|min:2|max:255|unique:categories,name'
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -42,7 +43,7 @@ class CategoryController extends Controller
         $category->fill($input);
         $category->save();
 
-        return response()->json(['title' => $category->title.':is Created']);
+        return response()->json(['message' => 'Category successfully created']);
 
         // return redirect()->route('category.index')->with('message','Success!');
     }
@@ -59,7 +60,7 @@ class CategoryController extends Controller
         $input = $request->except('_token','_method','id');
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|min:2|max:255|unique:categories,title,'.$id
+            'name' => 'required|min:2|max:255|unique:categories,name,'.$id
         ]);
         if($validator->fails()){
             return response()->json($validator->errors()->toJson(), 400);
@@ -71,7 +72,7 @@ class CategoryController extends Controller
         $category->fill($input);
         $category->update();
 
-        return response()->json(['title' => $category->title.':is Updated']);
+        return response()->json(['message' => 'Category successfully updated']);
         // return redirect()->route('category.index')->with('message','Success!');
     }
 
@@ -80,7 +81,7 @@ class CategoryController extends Controller
         $destroy = Category::find($id);
         $destroy->delete();
 
-        return response()->json(['title' => $destroy->title.':is Deleted']);
+        return response()->json(['message' => 'Category successfully deleted']);
         // return redirect()->route('category.index')->with('message','Success!');
     }
 }

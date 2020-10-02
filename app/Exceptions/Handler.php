@@ -65,6 +65,6 @@ class Handler extends ExceptionHandler
         elseif($exception instanceOf JWTException){
             return response()->json(['error' => 'There is problem with your token'],400);
         }
-        return parent::render($request, $exception);
+        return response()->json(['error' => $exception->getMessage()],400);
     }
 }

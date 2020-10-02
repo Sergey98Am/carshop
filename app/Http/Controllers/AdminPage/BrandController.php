@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminPage;
 
+use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Validator;
@@ -15,7 +16,9 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands = Brand::OrderBy('id','desc')->get();
+
+        return response()->json(['brands' => $brands]);
     }
 
     /**
@@ -39,7 +42,7 @@ class BrandController extends Controller
         $input = $request->except('_token');
 
         $validator = Validator::make($request->all(), [
-           'name' => 'required|min:2|max:255|unique:brands,name,'
+           'name' => 'required|min:2|max:255|unique:brands,name'
        ]);
        if($validator->fails()){
            return response()->json($validator->errors()->toJson(), 400);
@@ -51,7 +54,7 @@ class BrandController extends Controller
        $brand->fill($input);
        $brand->save();
 
-       return response()->json(['name' => $brand->name.':is Created']);
+       return response()->json(['message' => 'Brand successfully created']);
         // return redirect()->route('brand.index')->with('message','Success!');
     }
 
@@ -101,7 +104,7 @@ class BrandController extends Controller
         $brand->fill($input);
         $brand->update();
 
-        return response()->json(['name' => $brand->name.':is Updated']);
+        return response()->json(['message' => 'Brand successfully updated']);
         // return redirect()->route('brand.index')->with('message','Success!');
     }
 
@@ -116,7 +119,7 @@ class BrandController extends Controller
         $destroy = Brand::find($id);
         $destroy->delete();
 
-        return response()->json(['name' => $destroy->name.':is Deleted']);
+        return response()->json(['message' => 'Brand successfully deleted']);
         // return redirect()->route('category.index')->with('message','Success!');
     }
 }
