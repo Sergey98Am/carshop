@@ -13,75 +13,106 @@ use Validator;
 
 class CategoryController extends Controller
 {
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $categories = Category::OrderBy('id','desc')->get();
 
-        return response()->json(['categories' => $categories]);
+        return response()->json([
+            'categories' => $categories
+        ]);
     }
 
-    public function create()
-    {
-        return view('category_create');
-    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
 
     public function store(Request $request)
     {
-        $input = $request->except('_token');
-
          $validator = Validator::make($request->all(), [
             'name' => 'required|min:2|max:255|unique:categories,name'
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 400);
         }
 
-        // $validated = $request->validated();
+        Category::create([
+            'name' => $request->name
+        ]);
 
-        $category = new Category();
-        $category->fill($input);
-        $category->save();
-
-        return response()->json(['message' => 'Category successfully created']);
-
-        // return redirect()->route('category.index')->with('message','Success!');
+        return response()->json([
+            'message' => 'Category successfully created'
+        ]);
     }
 
-    public function edit($id)
-    {
-        $category = Category::find($id);
-
-        return view('category_edit',compact('category'));
-    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
 
     public function update(Request $request, $id)
     {
-        $input = $request->except('_token','_method','id');
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2|max:255|unique:categories,name,'.$id
         ]);
         if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 400);
         }
 
-        // $validated = $request->validated();
-
         $category = Category::find($id);
-        $category->fill($input);
-        $category->update();
+        if ($category) {
+            $category->create([
+                'name' => $request->name
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'category does not exist'
+            ], 400);
+        }
 
-        return response()->json(['message' => 'Category successfully updated']);
-        // return redirect()->route('category.index')->with('message','Success!');
+        return response()->json([
+            'message' => 'Category successfully updated'
+        ]);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
 
     public function destroy($id)
     {
         $destroy = Category::find($id);
-        $destroy->delete();
+        if ($destroy) {
+            return response()->json([
+                'message' => 'Category successfully deleted'
+            ],200);
 
-        return response()->json(['message' => 'Category successfully deleted']);
-        // return redirect()->route('category.index')->with('message','Success!');
+            $destroy->delete();
+        } else {
+            return response()->json([
+                'error' => 'Category does not exist'
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Category successfully deleted'
+        ]);
     }
 }

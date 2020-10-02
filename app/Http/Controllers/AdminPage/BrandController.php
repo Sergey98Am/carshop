@@ -12,72 +12,43 @@ class BrandController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $brands = Brand::OrderBy('id','desc')->get();
 
-        return response()->json(['brands' => $brands]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json([
+            'brands' => $brands
+        ],200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+
+    // TODO: create request file
     public function store(Request $request)
     {
-        $input = $request->except('_token');
-
         $validator = Validator::make($request->all(), [
            'name' => 'required|min:2|max:255|unique:brands,name'
        ]);
-       if($validator->fails()){
-           return response()->json($validator->errors()->toJson(), 400);
+       if ($validator->fails()) {
+           return response()->json([
+               'error' => $validator->errors()->toJson()
+           ], 400);
        }
 
-       // $validated = $request->validated();
+       Brand::create([
+           'name' => $request->name
+       ]);
 
-       $brand = new Brand();
-       $brand->fill($input);
-       $brand->save();
-
-       return response()->json(['message' => 'Brand successfully created']);
-        // return redirect()->route('brand.index')->with('message','Success!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+       return response()->json([
+           'message' => 'Brand successfully created'
+       ],200);
     }
 
     /**
@@ -85,41 +56,56 @@ class BrandController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        $input = $request->except('_token','_method','id');
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2|max:255|unique:brands,name,'.$id
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 400);
         }
 
-        // $validated = $request->validated();
-
         $brand = Brand::find($id);
-        $brand->fill($input);
-        $brand->update();
 
-        return response()->json(['message' => 'Brand successfully updated']);
-        // return redirect()->route('brand.index')->with('message','Success!');
+        if ($brand) {
+            $brand->create([
+                'name' => $request->name
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'brand does not exist'
+            ], 400);
+        }
+
+
+        return response()->json([
+            'message' => 'Brand successfully updated'
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
         $destroy = Brand::find($id);
-        $destroy->delete();
+        if ($destroy) {
+            return response()->json([
+                'message' => 'Brand successfully deleted'
+            ],200);
 
-        return response()->json(['message' => 'Brand successfully deleted']);
-        // return redirect()->route('category.index')->with('message','Success!');
+            $destroy->delete();
+        } else {
+            return response()->json([
+                'error' => 'brand does not exist'
+            ], 400);
+        }
     }
 }

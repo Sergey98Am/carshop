@@ -13,34 +13,26 @@ class CarController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $cars = Car::all();
-        return response()->json(['cars' => $cars]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json([
+            'cars' => $cars
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+
+    // TODO: Create request file
     public function store(Request $request)
     {
-        $input = $request->except('_token');
-
         $validator = Validator::make($request->all(), [
            'name' => 'required|min:2|max:255|unique:cars,name',
            'price' => 'required',
@@ -51,41 +43,26 @@ class CarController extends Controller
            'category_id' => 'exists:categories,id',
            'brand_id' => 'exists:brands,id'
        ]);
-       if($validator->fails()){
-           return response()->json($validator->errors()->toJson(), 400);
+       if ($validator->fails()) {
+           return response()->json([
+               'error' => $validator->errors()->toJson()
+           ], 400);
        }
 
-       // $validated = $request->validated();
+        Car::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'condition' => $request->condition,
+            'year' => $request->year,
+            'color' => $request->color,
+            'speed' => $request->speed,
+            'category_id' => $request->category_id,
+            'brand_id' => $request->brand_id
+        ]);
 
-       $car = new Car();
-       $car->fill($input);
-       $car->save();
-
-       return response()->json(['message' => 'Car successfully created']);
-        // return redirect()->route('car.index')->with('message','Success!');
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+       return response()->json([
+           'message' => 'Car successfully created'
+       ]);
     }
 
     /**
@@ -93,8 +70,10 @@ class CarController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+
+    // TODO: Create request file
     public function update(Request $request, $id)
     {
         $input = $request->except('_token','_method','id');
@@ -109,43 +88,75 @@ class CarController extends Controller
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id'
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 400);
         }
 
-        // $validated = $request->validated();
-
         $car = Car::find($id);
-        $car->fill($input);
-        $car->update();
+        if ($car) {
+            $car->create([
+                'name' => $request->name,
+                'price' => $request->price,
+                'condition' => $request->condition,
+                'year' => $request->year,
+                'color' => $request->color,
+                'speed' => $request->speed,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'car does not exist'
+            ], 400);
+        }
 
-        return response()->json(['message' => 'Car successfully updated']);
-        // return redirect()->route('car.index')->with('message','Success!');
+        return response()->json([
+            'message' => 'Car successfully updated'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
+
+    // TODO: Create request file
     public function destroy($id)
     {
         $destroy = Car::find($id);
-        $destroy->delete();
+        if ($destroy) {
+            return response()->json([
+                'message' => 'Car successfully deleted'
+            ],200);
 
-        return response()->json(['message' => 'Car successfully deleted']);
-        // return redirect()->route('category.index')->with('message','Success!');
+            $destroy->delete();
+
+        } else {
+            return response()->json([
+                'error' => 'car does not exist'
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Car successfully deleted'
+        ]);
     }
 
 
     public function uploadImage(Request $request, $id){
-       
+
         $validator = Validator::make($request->all(), [
-            'image' => 'mimes:jpeg,jpg,png,gif|required'
+            'image' => 'required|mimes:jpeg,jpg,png,gif'
         ]);
-       if($validator->fails()){
-           return response()->json($validator->errors()->toJson(), 400);
+
+       if ($validator->fails()) {
+           return response()->json([
+               'error' => $validator->errors()->toJson()
+           ], 400);
        }
             $car = Car::find($id);
             $file = $request->file('image');
@@ -153,6 +164,8 @@ class CarController extends Controller
             $file->move(public_path().'/images/',$file_name);
             $car->image = $file_name;
             $car->save();
-            return response()->json(['message' => 'Image successfully created']);
+            return response()->json([
+                'message' => 'Image successfully created'
+            ]);
     }
 }
