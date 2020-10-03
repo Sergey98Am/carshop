@@ -120,15 +120,10 @@ class OrderController extends Controller
                 'message' => 'Order successfully deleted'
             ],200);
 
-            $destroy->delete();
         } else {
             return response()->json([
                 'error' => 'Order does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Order successfully deleted'
-        ]);
     }
 }

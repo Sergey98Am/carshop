@@ -72,19 +72,17 @@ class BrandController extends Controller
         $brand = Brand::find($id);
 
         if ($brand) {
-            $brand->create([
+            $brand->update([
                 'name' => $request->name
             ]);
+            return response()->json([
+                'message' => 'Brand successfully updated'
+            ],200);
         } else {
             return response()->json([
                 'error' => 'brand does not exist'
             ], 400);
         }
-
-
-        return response()->json([
-            'message' => 'Brand successfully updated'
-        ],200);
     }
 
     /**
@@ -97,11 +95,12 @@ class BrandController extends Controller
     {
         $destroy = Brand::find($id);
         if ($destroy) {
+            $destroy->delete();
             return response()->json([
                 'message' => 'Brand successfully deleted'
             ],200);
 
-            $destroy->delete();
+
         } else {
             return response()->json([
                 'error' => 'brand does not exist'

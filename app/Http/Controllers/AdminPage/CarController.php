@@ -76,8 +76,6 @@ class CarController extends Controller
     // TODO: Create request file
     public function update(Request $request, $id)
     {
-        $input = $request->except('_token','_method','id');
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:2|max:255|unique:cars,name,'.$id,
             'price' => 'required',
@@ -133,17 +131,12 @@ class CarController extends Controller
                 'message' => 'Car successfully deleted'
             ],200);
 
-            $destroy->delete();
 
         } else {
             return response()->json([
                 'error' => 'car does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Car successfully deleted'
-        ]);
     }
 
 

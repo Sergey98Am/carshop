@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 use Stripe;
 use JWTAuth;
 
@@ -8,16 +9,16 @@ use JWTAuth;
 
 class CheckoutController extends Controller
 {
-    public function store()
+    public function store(Request $request, $id)
     {
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         try {
             $stripe = Stripe\Charge::create([
                 "amount" => 100 * 150,
-                "currency" => "usd",
-                "description" => "Making test payment.",
-                "source"  => "tok_visa",
+                "currency" => $request->currency,
+                "source"  => $request>stripeToken,
             ]);
+
 
             return response()->json(['stripe' => $stripe]);
         } catch (Stripe\Exception\ApiErrorException $e) {

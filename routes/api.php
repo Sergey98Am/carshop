@@ -17,10 +17,10 @@ Route::middleware('jwt')->group(function () {
         Route::resource('/cars','CarController');
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
-    // Route::post('get_user_details', 'AuthController@get_user_details');
-    // Route::get('car', 'CarController@index');
+
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
+    Route::post('/checkout/{id}','CheckoutController@store');
     Route::get('logout', 'AuthController@logout');
 });
 

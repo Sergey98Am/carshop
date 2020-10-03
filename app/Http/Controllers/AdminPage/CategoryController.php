@@ -103,16 +103,10 @@ class CategoryController extends Controller
             return response()->json([
                 'message' => 'Category successfully deleted'
             ],200);
-
-            $destroy->delete();
         } else {
             return response()->json([
                 'error' => 'Category does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Category successfully deleted'
-        ]);
     }
 }
