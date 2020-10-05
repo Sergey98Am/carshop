@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\AdminPage;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\CarImageUploadRequest;
+use App\Http\Requests\CarCreateRequest;
+use App\Http\Requests\CarUpdateRequest;
 use App\Models\Car;
-use JWTAuth;
-use Validator;
 
 class CarController extends Controller
 {
@@ -18,6 +18,7 @@ class CarController extends Controller
     public function index()
     {
         $cars = Car::all();
+
         return response()->json([
             'cars' => $cars
         ]);
@@ -30,26 +31,9 @@ class CarController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    // TODO: Create request file
-    public function store(Request $request)
+    public function store(CarCreateRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-           'name' => 'required|min:2|max:255|unique:cars,name',
-           'price' => 'required',
-           'condition' => 'required',
-           'year' => 'required',
-           'color' => 'required',
-           'speed' => 'required',
-           'category_id' => 'exists:categories,id',
-           'brand_id' => 'exists:brands,id'
-       ]);
-       if ($validator->fails()) {
-           return response()->json([
-               'error' => $validator->errors()->toJson()
-           ], 400);
-       }
-
-        Car::create([
+        $car = Car::create([
             'name' => $request->name,
             'price' => $request->price,
             'condition' => $request->condition,
@@ -60,9 +44,15 @@ class CarController extends Controller
             'brand_id' => $request->brand_id
         ]);
 
-       return response()->json([
-           'message' => 'Car successfully created'
-       ]);
+        if ($car) {
+            return response()->json([
+                'message' => 'Car successfully created'
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'Something went wrong'
+            ], 400);
+        }
     }
 
     /**
@@ -73,30 +63,11 @@ class CarController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    // TODO: Create request file
-    public function update(Request $request, $id)
+    public function update(CarUpdateRequest $request, $id)
     {
-        $input = $request->except('_token','_method','id');
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:cars,name,'.$id,
-            'price' => 'required',
-            'condition' => 'required',
-            'year' => 'required',
-            'color' => 'required',
-            'speed' => 'required',
-            'category_id' => 'exists:categories,id',
-            'brand_id' => 'exists:brands,id'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->toJson()
-            ], 400);
-        }
-
         $car = Car::find($id);
         if ($car) {
-            $car->create([
+            $car->update([
                 'name' => $request->name,
                 'price' => $request->price,
                 'condition' => $request->condition,
@@ -106,15 +77,14 @@ class CarController extends Controller
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id
             ]);
+            return response()->json([
+                'message' => 'Car successfully updated'
+            ], 200);
         } else {
             return response()->json([
-                'error' => 'car does not exist'
+                'error' => 'Car does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Car successfully updated'
-        ]);
     }
 
     /**
@@ -124,48 +94,41 @@ class CarController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    // TODO: Create request file
     public function destroy($id)
     {
         $destroy = Car::find($id);
         if ($destroy) {
+            $destroy->delete();
             return response()->json([
                 'message' => 'Car successfully deleted'
-            ],200);
-
-            $destroy->delete();
+            ], 200);
 
         } else {
             return response()->json([
-                'error' => 'car does not exist'
+                'error' => 'Car does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Car successfully deleted'
-        ]);
     }
 
 
-    public function uploadImage(Request $request, $id){
-
-        $validator = Validator::make($request->all(), [
-            'image' => 'required|mimes:jpeg,jpg,png,gif'
-        ]);
-
-       if ($validator->fails()) {
-           return response()->json([
-               'error' => $validator->errors()->toJson()
-           ], 400);
-       }
-            $car = Car::find($id);
+    public function uploadImage(CarImageUploadRequest $request, $id){
+        $car = Car::find($id);
+        if ($car) {
             $file = $request->file('image');
             $file_name = time().$file->getClientOriginalName();
             $file->move(public_path().'/images/',$file_name);
             $car->image = $file_name;
-            $car->save();
-            return response()->json([
-                'message' => 'Image successfully created'
+
+            $car->update([
+                'image' => $file_name
             ]);
+            return response()->json([
+                'message' => 'Image successfully uploaded'
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Car does not exist'
+            ]);
+        }
     }
 }
