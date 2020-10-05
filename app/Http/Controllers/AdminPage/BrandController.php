@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\AdminPage;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BrandCreateRequest;
+use App\Http\Requests\BrandUpdateRequest;
 use App\Models\Brand;
-use Illuminate\Http\Request;
-use Validator;
 
 class BrandController extends Controller
 {
@@ -30,25 +30,21 @@ class BrandController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    // TODO: create request file
-    public function store(Request $request)
+    public function store(BrandCreateRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-           'name' => 'required|min:2|max:255|unique:brands,name'
-       ]);
-       if ($validator->fails()) {
-           return response()->json([
-               'error' => $validator->errors()->toJson()
-           ], 400);
-       }
-
-       Brand::create([
+       $brand = Brand::create([
            'name' => $request->name
        ]);
 
-       return response()->json([
-           'message' => 'Brand successfully created'
-       ],200);
+       if ($brand) {
+           return response()->json([
+               'message' => 'Brand successfully created'
+           ],200);
+       } else {
+           return response()->json([
+               'error' => 'Something went wrong'
+           ],400);
+       }
     }
 
     /**
@@ -58,33 +54,22 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(BrandUpdateRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:brands,name,'.$id
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->toJson()
-            ], 400);
-        }
-
         $brand = Brand::find($id);
 
         if ($brand) {
-            $brand->create([
+            $brand->update([
                 'name' => $request->name
             ]);
+            return response()->json([
+                'message' => 'Brand successfully updated'
+            ],200);
         } else {
             return response()->json([
-                'error' => 'brand does not exist'
+                'error' => 'Brand does not exist'
             ], 400);
         }
-
-
-        return response()->json([
-            'message' => 'Brand successfully updated'
-        ],200);
     }
 
     /**
@@ -96,15 +81,15 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $destroy = Brand::find($id);
+
         if ($destroy) {
+            $destroy->delete();
             return response()->json([
                 'message' => 'Brand successfully deleted'
             ],200);
-
-            $destroy->delete();
         } else {
             return response()->json([
-                'error' => 'brand does not exist'
+                'error' => 'Brand does not exist'
             ], 400);
         }
     }

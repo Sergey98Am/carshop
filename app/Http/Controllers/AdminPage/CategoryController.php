@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\AdminPage;
 
-use App\Http\Requests\CategoryRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Auth;
-use App\Models\User;
+use App\Http\Requests\CategoryCreateRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
-use JWTAuth;
-use Validator;
+
 
 class CategoryController extends Controller
 {
@@ -34,24 +31,21 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function store(Request $request)
+    public function store(CategoryCreateRequest $request)
     {
-         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:categories,name'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->toJson()
-            ], 400);
-        }
-
-        Category::create([
+        $category = Category::create([
             'name' => $request->name
         ]);
 
-        return response()->json([
-            'message' => 'Category successfully created'
-        ]);
+        if ($category) {
+            return response()->json([
+                'message' => 'Category successfully created'
+            ],200);
+        } else {
+            return response()->json([
+                'error' => 'Something went wrong'
+            ],400);
+        }
     }
 
     /**
@@ -62,31 +56,22 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function update(Request $request, $id)
+    public function update(CategoryUpdateRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|min:2|max:255|unique:categories,name,'.$id
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'error' => $validator->errors()->toJson()
-            ], 400);
-        }
-
         $category = Category::find($id);
+
         if ($category) {
-            $category->create([
+            $category->update([
                 'name' => $request->name
             ]);
+            return response()->json([
+                'message' => 'Category successfully updated'
+            ],200);
         } else {
             return response()->json([
                 'error' => 'category does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Category successfully updated'
-        ]);
     }
 
     /**
@@ -99,20 +84,16 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $destroy = Category::find($id);
+
         if ($destroy) {
+            $destroy->delete();
             return response()->json([
                 'message' => 'Category successfully deleted'
             ],200);
-
-            $destroy->delete();
         } else {
             return response()->json([
                 'error' => 'Category does not exist'
             ], 400);
         }
-
-        return response()->json([
-            'message' => 'Category successfully deleted'
-        ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BrandUpdateRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,9 @@ class BrandUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->request->get('id');
         return [
-            'name' => 'required|min:2|max:255|unique:brands,name,'.$id
+            'email' => 'required',
+            'password' => 'required',
         ];
     }
 }
