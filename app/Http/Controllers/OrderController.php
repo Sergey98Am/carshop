@@ -18,15 +18,9 @@ class OrderController extends Controller
     {
         $orders = Order::OrderBy('id','desc')->get();
 
-        if ($orders->count()) {
             return response()->json([
                 'orders' => $orders
             ]);
-        } else {
-            return response()->json([
-                'error' => 'There are no Orders'
-            ]);
-        }
     }
 
     /**
@@ -47,11 +41,11 @@ class OrderController extends Controller
         if ($order) {
             return response()->json([
                 'message' => 'Order successfully created'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Something went wrong'
-            ],400);
+            ], 400);
         }
     }
 

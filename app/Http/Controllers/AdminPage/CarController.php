@@ -47,11 +47,11 @@ class CarController extends Controller
         if ($car) {
             return response()->json([
                 'message' => 'Car successfully created'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Something went wrong'
-            ],400);
+            ], 400);
         }
     }
 
@@ -79,7 +79,7 @@ class CarController extends Controller
             ]);
             return response()->json([
                 'message' => 'Car successfully updated'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Car does not exist'
@@ -101,7 +101,7 @@ class CarController extends Controller
             $destroy->delete();
             return response()->json([
                 'message' => 'Car successfully deleted'
-            ],200);
+            ], 200);
 
         } else {
             return response()->json([

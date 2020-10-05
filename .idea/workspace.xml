@@ -3,21 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b966da54-7c1d-44c8-a067-ab23e2b0dc4c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/BrandController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/BrandController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/CarController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/CarController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/CategoryController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/BrandCreateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/BrandCreateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/BrandUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/BrandUpdateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/CarImageUploadRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/CarImageUploadRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/CategoryCreateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/CategoryCreateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/CategoryUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/CategoryUpdateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +167,7 @@
       <workItem from="1601638554887" duration="13627000" />
       <workItem from="1601718109449" duration="28000" />
       <workItem from="1601718154453" duration="25730000" />
-      <workItem from="1601826194479" duration="4172000" />
+      <workItem from="1601826194479" duration="4887000" />
     </task>
     <servers />
   </component>

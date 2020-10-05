@@ -40,11 +40,11 @@ class CategoryController extends Controller
         if ($category) {
             return response()->json([
                 'message' => 'Category successfully created'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Something went wrong'
-            ],400);
+            ], 400);
         }
     }
 
@@ -66,7 +66,7 @@ class CategoryController extends Controller
             ]);
             return response()->json([
                 'message' => 'Category successfully updated'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'category does not exist'
@@ -89,7 +89,7 @@ class CategoryController extends Controller
             $destroy->delete();
             return response()->json([
                 'message' => 'Category successfully deleted'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Category does not exist'
