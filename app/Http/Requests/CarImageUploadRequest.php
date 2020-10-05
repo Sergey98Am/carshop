@@ -24,7 +24,7 @@ class CarImageUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'mimes:jpeg,jpg,png,gif|required'
+            'image' => 'required|mimes:jpeg,jpg,png,gif'
         ];
     }
 }

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b966da54-7c1d-44c8-a067-ab23e2b0dc4c" name="Default Changelist" comment="" />
+    <list default="true" id="b966da54-7c1d-44c8-a067-ab23e2b0dc4c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution>
       <executable path="composer" />
@@ -135,6 +137,7 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1iJvX0TTfdD6A1fzfwVDVshDH3O" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -162,6 +165,9 @@
       <option name="presentableId" value="Default" />
       <updated>1601638551493</updated>
       <workItem from="1601638554887" duration="13627000" />
+      <workItem from="1601718109449" duration="28000" />
+      <workItem from="1601718154453" duration="25730000" />
+      <workItem from="1601826194479" duration="4887000" />
     </task>
     <servers />
   </component>
@@ -181,10 +187,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="459" y="276" key="ComposerInitDialogKey/0.0.1366.728@0.0.1366.728" timestamp="1601640147083" />
-    <state x="463" y="105" key="FileChooserDialogImpl" timestamp="1601640084756">
+    <state x="463" y="105" key="FileChooserDialogImpl" timestamp="1601718147460">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="105" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1601640084756" />
+    <state x="463" y="105" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1601718147460" />
     <state x="522" y="66" key="RollbackChangesDialog" timestamp="1601640804695">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
