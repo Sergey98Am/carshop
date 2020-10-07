@@ -39,7 +39,11 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
+    public function shops(){
+        return $this->hasMany('App\Models\Shop');
+    }
+
     public function isRole(){
         return $this->role_id;
     }
@@ -53,7 +57,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function orders(){
-        return $this->belongsTo('App\Models\Order');
+        return $this->hasMany('App\Models\Order');
     }
 
     // Rest omitted for brevity
