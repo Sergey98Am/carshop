@@ -9,12 +9,12 @@ use App\Models\Order;
 use JWTAuth;
 
 class CheckoutController extends Controller
-{    public function checkout(TransactionRequest $request, $id)
-    {
-        $order = Order::find($id);
+{
+    public function checkout(TransactionRequest $request, $id) {
+        try {
+            $order = Order::find($id);
 
-        if ($order) {
-            try {
+            if ($order) {
                 $stripe = new \Stripe\StripeClient(
                     config('services.stripe.secret')
                 );
@@ -69,13 +69,13 @@ class CheckoutController extends Controller
                         'error' => 'Something went wrong'
                     ], 400);
                 }
-            } catch (Stripe\Exception\ApiErrorException $e) {
-                return response()->json(['error' => $e->getMessage()]);
+            } else {
+                return response()->json([
+                    'error' => 'Order does not exists'
+                ], 400);
             }
-        } else {
-            return response()->json([
-                'error' => 'Order does not exists'
-            ], 400);
+        } catch (Stripe\Exception\ApiErrorException $e) {
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
 }
