@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::post('/checkout/{id}','CheckoutController@store');
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
 
 });
+
 
 // Route::get('/profile', 'ProfileController@index');
 
@@ -17,6 +19,8 @@ Route::middleware('jwt')->group(function () {
         Route::resource('/cars','CarController');
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
+
+    Route::post('/checkout/{id}','CheckoutController@checkout');
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
     Route::get('logout', 'AuthController@logout');

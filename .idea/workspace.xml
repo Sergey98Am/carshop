@@ -3,6 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b966da54-7c1d-44c8-a067-ab23e2b0dc4c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/BrandController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminPage/BrandController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CheckoutController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CheckoutController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrderController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Transaction.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Transaction.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_29_094911_create_transactions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_29_094911_create_transactions_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,6 +176,10 @@
       <workItem from="1601718109449" duration="28000" />
       <workItem from="1601718154453" duration="25730000" />
       <workItem from="1601826194479" duration="4887000" />
+      <workItem from="1601888357760" duration="287000" />
+      <workItem from="1601889487611" duration="1077000" />
+      <workItem from="1601890608210" duration="17482000" />
+      <workItem from="1601971383283" duration="22314000" />
     </task>
     <servers />
   </component>
@@ -191,10 +203,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="105" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1601718147460" />
-    <state x="522" y="66" key="RollbackChangesDialog" timestamp="1601640804695">
+    <state x="129" y="55" key="MergeDialog" timestamp="1601882932111">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="522" y="66" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1601640804695" />
+    <state x="129" y="55" key="MergeDialog/0.0.1366.728@0.0.1366.728" timestamp="1601882932111" />
+    <state x="321" y="125" key="MultipleFileMergeDialog" timestamp="1601882932120">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="321" y="125" key="MultipleFileMergeDialog/0.0.1366.728@0.0.1366.728" timestamp="1601882932120" />
+    <state x="459" y="87" key="NewPhpClassDialog" timestamp="1601892117388">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="459" y="87" key="NewPhpClassDialog/0.0.1366.728@0.0.1366.728" timestamp="1601892117388" />
+    <state x="522" y="66" key="RollbackChangesDialog" timestamp="1601882635518">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="522" y="66" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1601882635518" />
     <state x="184" y="9" key="SettingsEditor" timestamp="1601640088061">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -203,6 +227,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="530" y="277" key="VCS.ChangelistChooser/0.0.1366.728@0.0.1366.728" timestamp="1601640801377" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1601894290352">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1601894290352" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1601638865867">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

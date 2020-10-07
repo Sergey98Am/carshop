@@ -7,7 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
-
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -70,9 +70,12 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'error' => 'There is problem with your token'
             ],400);
+        } elseif ($exception instanceOf ValidationException) {
+            return response()->json([
+                'error' => $exception->errors()
+            ],400);
         }
-        return response()->json([
-            'error' => $exception->errors()
-        ],400);
+
+        return parent::render($request, $exception);
     }
 }

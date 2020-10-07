@@ -15,10 +15,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('transaction_id');
+            $table->string('country');
+            $table->string('city');
+            $table->integer('phone');
+            $table->integer('amount');
+            $table->string('currency');
             $table->enum('status', ['canceled', 'purchased']);
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
