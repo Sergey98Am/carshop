@@ -20,6 +20,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
 
+    Route::post('/cancel-order/{id}','CancelOrderController@cancelOrder');
     Route::post('/checkout/{id}','CheckoutController@checkout');
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
