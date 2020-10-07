@@ -14,11 +14,7 @@ class Order extends Model
         'user_id'
     ];
 
-    public function transactions(){
-        return $this->hasMany('App\Models\Transaction');
-    }
-
-    public function status(){
-        return $this->hasOne('App\Models\Status');
+    public function transaction(){
+        return $this->hasOne('App\Models\Transaction');
     }
 }
