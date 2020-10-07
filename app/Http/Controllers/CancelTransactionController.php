@@ -9,9 +9,9 @@ use App\Models\Order;
 class CancelTransactionController extends Controller
 {
     public function cancelTransaction(CancelTransactionRequest $request, $id){
-        $order = Order::with('transaction')->find($id);
         try {
-            if ($order) {
+            $order = Order::with('transaction')->find($id);
+            if ($order && $order->transaction) {
                 $stripe = new \Stripe\StripeClient(
                     config('services.stripe.secret')
                 );
@@ -24,11 +24,9 @@ class CancelTransactionController extends Controller
                     'status_id' => 2
                 ]);
 
-                if ($order->transaction) {
-                    $order->transaction->update([
-                        'status' => 'Canceled'
-                    ]);
-                }
+                $order->transaction->update([
+                    'status' => 'Canceled'
+                ]);
 
                 return response()->json([
                     'cancel' => $cancel,
