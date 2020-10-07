@@ -20,7 +20,7 @@ class BrandController extends Controller
 
         return response()->json([
             'brands' => $brands
-        ],200);
+        ], 200);
     }
 
     /**
@@ -39,11 +39,11 @@ class BrandController extends Controller
        if ($brand) {
            return response()->json([
                'message' => 'Brand successfully created'
-           ],200);
+           ], 200);
        } else {
            return response()->json([
                'error' => 'Something went wrong'
-           ],400);
+           ], 400);
        }
     }
 
@@ -64,7 +64,7 @@ class BrandController extends Controller
             ]);
             return response()->json([
                 'message' => 'Brand successfully updated'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Brand does not exist'
@@ -86,7 +86,7 @@ class BrandController extends Controller
             $destroy->delete();
             return response()->json([
                 'message' => 'Brand successfully deleted'
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'error' => 'Brand does not exist'

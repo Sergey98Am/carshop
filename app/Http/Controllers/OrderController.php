@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Models\Order;
@@ -18,9 +17,9 @@ class OrderController extends Controller
     {
         $orders = Order::OrderBy('id','desc')->get();
 
-            return response()->json([
-                'orders' => $orders
-            ]);
+        return response()->json([
+            'orders' => $orders
+        ]);
     }
 
     /**
@@ -65,9 +64,6 @@ class OrderController extends Controller
             $order->update([
                 'quantity' => $request->quantity,
                 'item_price' => $request->item_price,
-                'status_id' => $request->status_id,
-                'car_id' => $request->car_id,
-                'user_id' => $request->user_id
             ]);
             return response()->json([
                 'message' => 'Order successfully updated'
