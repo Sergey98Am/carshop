@@ -13,6 +13,7 @@ class Car extends Model
         'year',
         'color',
         'speed',
+        'shop_id',
         'category_id',
         'brand_id'
     ];

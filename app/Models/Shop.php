@@ -10,4 +10,8 @@ class Shop extends Model
         'name',
         'user_id'
     ];
+
+    public function cars(){
+        return $this->hasMany('App\Models\Car');
+    }
 }

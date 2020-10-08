@@ -14,12 +14,13 @@ Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin-page', 'namespace' => 'AdminPage', 'middleware' => ['role']],function (){
         Route::resource('/categories','CategoryController');
         Route::resource('/brands','BrandController');
-        Route::resource('/cars','CarController');
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
 
     Route::group(['prefix' => 'shop-owner-page', 'namespace' => 'ShopOwnerPage', 'middleware' => ['role-shop-owner']],function (){
         Route::resource('/shops','ShopController');
+        Route::get('cars-shop/{id}', ['as' => 'cars.index', 'uses' => 'CarController@index']);
+        Route::resource('/cars','CarController', ['except' => ['index']]);
     });
 
     Route::post('/checkout/{id}','TransactionController@checkout');
@@ -29,5 +30,4 @@ Route::middleware('jwt')->group(function () {
     Route::resource('/transactions','TransactionController');
     Route::get('logout', 'AuthController@logout');
 });
-
 
