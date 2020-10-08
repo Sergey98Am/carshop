@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TransactionRequest extends FormRequest
+class CancelTransactionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,7 @@ class TransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'country' => 'required',
-            'city' => 'required',
-            'phone' => 'required|numeric',
-            'currency' => 'required',
-            'order_id' => 'exists:orders,id',
-            'user_id' => 'exists:users,id',
+            //
         ];
     }
 }

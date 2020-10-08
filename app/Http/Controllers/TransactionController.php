@@ -1,104 +1,113 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
-use Validator;
+use Stripe;
+use App\Models\Order;
+use JWTAuth;
 
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $transactions = Transaction::OrderBy('id','desc')->get();
+    public function checkout(TransactionRequest $request, $id) {
+        try {
+            $order = Order::find($id);
 
-        return response()->json(['transactions' => $transactions]);
-    }
+            if ($order) {
+                $stripe = new \Stripe\StripeClient(
+                    config('services.stripe.secret')
+                );
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+                $token = $stripe->tokens->create([
+                    'card' => [
+                        'number' => $request->number,
+                        'exp_month' => $request->exp_month,
+                        'exp_year' => $request->exp_year,
+                        'cvc' => $request->cvc,
+                        'address_country' => $request->country,
+                        'address_city' => $request->city,
+                    ],
+                ]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $input = $request->except('_token');
+                $customer = $stripe->customers->create([
+                    'phone' => $request->phone,
+                    'source' => $token->id
+                ]);
 
-        $validator = Validator::make($request->all(), [
-            'status' => 'required',
-            'order_id' => 'exists:orders,id'
-        ]);
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(), 400);
+                $charge = $stripe->charges->create([
+                    'customer' => $customer->id,
+                    'amount' => ($order->item_price * 100) * $order->quantity,
+                    'currency' => $request->currency,
+                ]);
+
+                //Create transaction
+                $transaction = Transaction::create([
+                    'transaction_id' => $charge->id,
+                    'country' => $request->country,
+                    'city' => $request->city,
+                    'phone' => $request->phone,
+                    'amount' => $order->item_price * $order->quantity,
+                    'currency' => $request->currency,
+                    'status' => 'Purchased',
+                    'order_id' => $order->id,
+                    'user_id' => JWTAuth::user()->id
+                ]);
+
+                if ($transaction) {
+                    $order->update([
+                       'status_id' => 3
+                    ]);
+
+                    return response()->json([
+                        'message' => 'Transaction successfully created',
+                        'charge' => $charge,
+                        'customer' => $customer
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'error' => 'Something went wrong'
+                    ], 400);
+                }
+            } else {
+                return response()->json([
+                    'error' => 'Order does not exists'
+                ], 400);
+            }
+        } catch (Stripe\Exception\ApiErrorException $e) {
+            return response()->json(['error' => $e->getMessage()]);
         }
-
-        // $validated = $request->validated();
-
-        $order = new Transaction();
-        $order->fill($input);
-        $order->save();
-
-        return response()->json(['message' => 'Transaction successfully created']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    public function cancelTransaction($id){
+        try {
+            $order = Order::with('transaction')->find($id);
+            if ($order && $order->transaction) {
+                $stripe = new \Stripe\StripeClient(
+                    config('services.stripe.secret')
+                );
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+                $cancel = $stripe->refunds->create([
+                    'charge' => $order->transaction->transaction_id,
+                ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+                $order->update([
+                    'status_id' => 2
+                ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+                $order->transaction->update([
+                    'status' => 'Canceled'
+                ]);
+
+                return response()->json([
+                    'cancel' => $cancel,
+                ], 200);
+            } else {
+                return response()->json([
+                    'error' => 'Order does not exists'
+                ], 400);
+            }
+        } catch (Stripe\Exception\ApiErrorException $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }
