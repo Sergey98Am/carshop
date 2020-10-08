@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
-
 });
 
 
@@ -24,6 +23,7 @@ Route::middleware('jwt')->group(function () {
     });
 
     Route::post('/checkout/{id}','TransactionController@checkout');
+    Route::post('/cancel-order/{id}','OrderController@cancelOrder');
     Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
