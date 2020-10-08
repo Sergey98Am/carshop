@@ -22,6 +22,7 @@ Route::middleware('jwt')->group(function () {
         Route::resource('/cars','CarController');
     });
 
+    Route::get('/search','SearchController@search');
     Route::get('/cars','ShopOwnerPage\CarController@index');
     Route::get('/cars-shop/{id}','ShopOwnerPage\CarController@carsShop');
     Route::post('/checkout/{id}','TransactionController@checkout');
