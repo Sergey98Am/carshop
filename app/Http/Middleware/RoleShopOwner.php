@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use JWTAuth;
 
-class Role
+class RoleShopOwner
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class Role
      */
     public function handle($request, Closure $next)
     {
-        if (JWTAuth::check() && JWTAuth::user()->isRole() == 3){
+        if (JWTAuth::check() && JWTAuth::user()->isRole() == 2){
             return $next($request);
         }
         return response()->json(['message' => 'You cannot do this'],400);

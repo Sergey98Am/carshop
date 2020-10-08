@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
                 'gender' => 'Male',
                 'password' => Hash::make('serg_password'),
                 'country_id' => 20,
-                'role_id' => 2,
+                'role_id' => 3,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
