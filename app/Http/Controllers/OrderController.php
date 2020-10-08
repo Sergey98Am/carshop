@@ -15,11 +15,17 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::OrderBy('id','desc')->get();
+        try {
+            $orders = Order::OrderBy('id', 'desc')->get();
 
-        return response()->json([
-            'orders' => $orders
-        ]);
+            return response()->json([
+                'orders' => $orders
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 
     /**
@@ -30,20 +36,24 @@ class OrderController extends Controller
      */
     public function store(OrderCreateRequest $request)
     {
-        $order = Order::create([
-            'quantity' => $request->quantity,
-            'item_price' => $request->item_price,
-            'car_id' => $request->car_id,
-            'user_id' => $request->user_id
-        ]);
+        try {
+            $order = Order::create([
+                'quantity' => $request->quantity,
+                'item_price' => $request->item_price,
+                'car_id' => $request->car_id,
+                'user_id' => $request->user_id
+            ]);
 
-        if ($order) {
+            if ($order) {
+                return response()->json([
+                    'message' => 'Order successfully created'
+                ], 200);
+            } else {
+                throw new \Exception('Something went wrong');
+            }
+        } catch(\Exception $e) {
             return response()->json([
-                'message' => 'Order successfully created'
-            ], 200);
-        } else {
-            return response()->json([
-                'error' => 'Something went wrong'
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
@@ -58,19 +68,23 @@ class OrderController extends Controller
 
     public function update(OrderUpdateRequest $request, $id)
     {
-        $order = Order::find($id);
+        try {
+            $order = Order::find($id);
 
-        if ($order) {
-            $order->update([
-                'quantity' => $request->quantity,
-                'item_price' => $request->item_price,
-            ]);
+            if ($order) {
+                $order->update([
+                    'quantity' => $request->quantity,
+                    'item_price' => $request->item_price,
+                ]);
+                return response()->json([
+                    'message' => 'Order successfully updated'
+                ]);
+            } else {
+                throw new \Exception('Order does not exist');
+            }
+        } catch(\Exception $e) {
             return response()->json([
-                'message' => 'Order successfully updated'
-            ]);
-        } else {
-            return response()->json([
-                'error' => 'Order does not exist'
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
@@ -83,16 +97,43 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $destroy = Order::find($id);
-        if ($destroy) {
-            $destroy->delete();
-            return response()->json([
-                'message' => 'Order successfully deleted'
-            ],200);
+        try {
+            $order = Order::find($id);
 
-        } else {
+            if ($order) {
+                $order->delete();
+                return response()->json([
+                    'message' => 'Order successfully deleted'
+                ], 200);
+
+            } else {
+                throw new \Exception('Order does not exist');
+            }
+        } catch(\Exception $e) {
             return response()->json([
-                'error' => 'Order does not exist'
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function cancelOrder($id){
+        try {
+            $order = Order::find($id);
+
+            if ($order) {
+                $order->update([
+                    'status_id' => '2'
+                ]);
+
+                return response()->json([
+                    'message' => 'Order canceled',
+                ], 200);
+            } else {
+                throw new \Exception('Order does not exist');
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
             ], 400);
         }
     }
