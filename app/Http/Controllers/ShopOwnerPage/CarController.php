@@ -8,6 +8,7 @@ use App\Http\Requests\CarCreateRequest;
 use App\Http\Requests\CarUpdateRequest;
 use App\Models\Shop;
 use App\Models\Car;
+use JWTAuth;
 
 class CarController extends Controller
 {
@@ -16,19 +17,15 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($id)
+    public function index()
     {
         try {
-            $shop = Shop::with('cars')->find($id);
+            $cars = Car::OrderBy('id', 'desc')->get();
 
-            if ($shop) {
-                return response()->json([
-                    'cars' => $shop->cars
-                ], 200);
-            } else {
-                throw new \Exception('Cars does not exist');
-            }
-        } catch(\Exception $e) {
+            return response()->json([
+                'cars' => $cars
+            ], 200);
+        }  catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -54,7 +51,8 @@ class CarController extends Controller
                 'speed' => $request->speed,
                 'shop_id' => $request->shop_id,
                 'category_id' => $request->category_id,
-                'brand_id' => $request->brand_id
+                'brand_id' => $request->brand_id,
+                'user_id' => JWTAuth::user()->id
             ]);
 
             if ($car) {
@@ -92,7 +90,8 @@ class CarController extends Controller
                     'color' => $request->color,
                     'speed' => $request->speed,
                     'category_id' => $request->category_id,
-                    'brand_id' => $request->brand_id
+                    'brand_id' => $request->brand_id,
+                    'user_id' => JWTAuth::user()->id
                 ]);
                 return response()->json([
                     'message' => 'Car successfully updated'
@@ -150,6 +149,25 @@ class CarController extends Controller
                 return response()->json([
                     'message' => 'Image successfully uploaded'
                 ]);
+            } else {
+                throw new \Exception('Cars does not exist');
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function carsShop($id)
+    {
+        try {
+            $shop = Shop::with('cars')->find($id);
+
+            if ($shop) {
+                return response()->json([
+                    'cars' => $shop->cars
+                ], 200);
             } else {
                 throw new \Exception('Cars does not exist');
             }

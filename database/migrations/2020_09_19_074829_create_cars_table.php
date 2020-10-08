@@ -25,11 +25,13 @@ class CreateCarsTable extends Migration
     $table->string('color');
     $table->integer('speed');
     $table->unsignedBigInteger('shop_id');
-    $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
     $table->unsignedBigInteger('category_id');
-    $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
     $table->unsignedBigInteger('brand_id');
+    $table->unsignedBigInteger('user_id');
+    $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+    $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
     $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     $table->timestamps();
 });
     }

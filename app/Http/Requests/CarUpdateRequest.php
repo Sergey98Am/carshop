@@ -33,7 +33,8 @@ class CarUpdateRequest extends FormRequest
             'speed' => 'required',
             'shop_id' => 'exists:shops,id',
             'category_id' => 'exists:categories,id',
-            'brand_id' => 'exists:brands,id'
+            'brand_id' => 'exists:brands,id',
+            'user_id' => 'exists:users,id'
         ];
     }
 }
