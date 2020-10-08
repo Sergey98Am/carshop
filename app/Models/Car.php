@@ -16,7 +16,6 @@ class Car extends Model
         'shop_id',
         'category_id',
         'brand_id',
-        'user_id'
     ];
 
     public function orders(){

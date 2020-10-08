@@ -52,7 +52,6 @@ class CarController extends Controller
                 'shop_id' => $request->shop_id,
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
-                'user_id' => JWTAuth::user()->id
             ]);
 
             if ($car) {
@@ -91,7 +90,6 @@ class CarController extends Controller
                     'speed' => $request->speed,
                     'category_id' => $request->category_id,
                     'brand_id' => $request->brand_id,
-                    'user_id' => JWTAuth::user()->id
                 ]);
                 return response()->json([
                     'message' => 'Car successfully updated'
