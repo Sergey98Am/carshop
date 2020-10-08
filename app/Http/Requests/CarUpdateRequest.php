@@ -22,17 +22,19 @@ class CarUpdateRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {       
-        $id = $this->request->get('id');
+    {
+
         return [
-            'name' => 'required|min:2|max:255|unique:cars,name,'.$id,
+            'name' => 'required|min:2|max:255',
             'price' => 'required',
             'condition' => 'required',
             'year' => 'required',
             'color' => 'required',
             'speed' => 'required',
+            'shop_id' => 'exists:shops,id',
             'category_id' => 'exists:categories,id',
-            'brand_id' => 'exists:brands,id'
+            'brand_id' => 'exists:brands,id',
+            'user_id' => 'exists:users,id'
         ];
     }
 }

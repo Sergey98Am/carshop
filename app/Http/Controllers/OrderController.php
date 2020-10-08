@@ -20,7 +20,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'orders' => $orders
-            ]);
+            ], 200);
         } catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -78,7 +78,7 @@ class OrderController extends Controller
                 ]);
                 return response()->json([
                     'message' => 'Order successfully updated'
-                ]);
+                ], 200);
             } else {
                 throw new \Exception('Order does not exist');
             }
