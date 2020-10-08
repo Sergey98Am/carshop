@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "2.4",
         "nesbot/carbon": "^2.39",
+        "stripe/stripe-php": "^7.57",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

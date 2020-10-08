@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::post('/checkout/{id}','CheckoutController@store');
+Route::post('/checkout/{id}','TransactionController@store');
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
@@ -20,8 +20,8 @@ Route::middleware('jwt')->group(function () {
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
 
-    Route::post('/checkout/{id}','CheckoutController@checkout');
-    Route::post('/cancel-transaction/{id}','CancelTransactionController@cancelTransaction');
+    Route::post('/checkout/{id}','TransactionController@checkout');
+    Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
     Route::get('logout', 'AuthController@logout');

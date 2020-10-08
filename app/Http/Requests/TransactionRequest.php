@@ -28,7 +28,6 @@ class TransactionRequest extends FormRequest
             'city' => 'required',
             'phone' => 'required|numeric',
             'currency' => 'required',
-            'status' => 'required',
             'order_id' => 'exists:orders,id',
             'user_id' => 'exists:users,id',
         ];
