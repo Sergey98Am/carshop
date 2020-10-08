@@ -23,7 +23,8 @@ Route::middleware('jwt')->group(function () {
         Route::resource('/shops','ShopController');
     });
 
-    Route::post('/checkout/{id}','CheckoutController@checkout');
+    Route::post('/checkout/{id}','TransactionController@checkout');
+    Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
     Route::resource('/orders','OrderController');
     Route::resource('/transactions','TransactionController');
     Route::get('logout', 'AuthController@logout');
