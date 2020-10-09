@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CarImageUploadRequest;
 use App\Http\Requests\CarCreateRequest;
 use App\Http\Requests\CarUpdateRequest;
+use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\Car;
 use JWTAuth;
@@ -170,6 +171,27 @@ class CarController extends Controller
                 throw new \Exception('Cars does not exist');
             }
         } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function search(Request $request)
+    {
+        try {
+            $cars = Car::where('name', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('price', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('condition', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('year', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('color', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('speed', 'LIKE', '%' . $request->search . '%')
+                ->get();
+
+            return response()->json([
+                'cars' => $cars
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
