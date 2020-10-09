@@ -24,10 +24,14 @@ class TransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'country' => 'required',
-            'city' => 'required',
+            'number' => 'required|numeric',
+            'exp_month' => 'required|numeric|between:1,12',
+            'exp_year' => 'required|numeric|digits:4|min:'.(date('Y')),
+            'cvc' => 'required|numeric|digits:3',
+            'country' => 'required|alpha',
+            'city' => 'required|alpha',
             'phone' => 'required|numeric',
-            'currency' => 'required',
+            'currency' => 'required|alpha',
             'order_id' => 'exists:orders,id',
             'user_id' => 'exists:users,id',
         ];
