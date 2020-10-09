@@ -7,9 +7,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
 });
 
-
-// Route::get('/profile', 'ProfileController@index');
-
 Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin-page', 'namespace' => 'AdminPage', 'middleware' => ['role']],function (){
         Route::resource('/categories','CategoryController');
@@ -22,7 +19,7 @@ Route::middleware('jwt')->group(function () {
         Route::resource('/cars','CarController');
     });
 
-    Route::get('/search','SearchController@search');
+    Route::get('/search','ShopOwnerPage\CarController@search');
     Route::get('/cars','ShopOwnerPage\CarController@index');
     Route::get('/cars-shop/{id}','ShopOwnerPage\CarController@carsShop');
     Route::post('/checkout/{id}','TransactionController@checkout');
