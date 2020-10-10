@@ -9,6 +9,6 @@ class Status extends Model
     protected $fillable = ['name'];
 
     public function orders(){
-        return $this->belongToMany('App\Models\Order');
+        return $this->belongsToMany('App\Models\Order');
     }
 }

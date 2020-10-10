@@ -24,11 +24,11 @@ class OrderUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'quantity' => 'required',
-            'item_price' => 'required',
-            'status_id' => 'exists:statuses,id',
-            'car_id' => 'exists:cars,id',
-            'user_id' => 'exists:users,id'
+            'quantity' => ['required','numeric'],
+            'item_price' => ['required','numeric'],
+            'status_id' => ['exists:statuses,id'],
+            'car_id' => ['exists:cars,id'],
+            'user_id' => ['exists:users,id'],
         ];
     }
 }

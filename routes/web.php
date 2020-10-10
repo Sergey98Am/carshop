@@ -13,45 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'FrontController@index')->name('front');
-// Route::get('/category_num/{id}', 'FrontController@categoryPosts')->name('categoryPosts');
-// Route::get('/post_num/{id}', 'FrontController@viewPost')->name('viewPost');
-// Route::get('/tag_num/{id}', 'FrontController@tagPosts')->name('tagPosts');
-// Route::get('/comments_view/{id}', 'CommentController@CommentsView')->name('commentsView');
-// Route::post('/comment_create', 'CommentController@CommentCreate')->name('commentCreate');
-// Route::delete('/comment_delete/{id}', 'CommentController@CommentDelete')->name('commentDelete');
-// Route::get('/sub_comments_view/{id}', 'CommentController@SubCommentsView')->name('subCommentsView');
 
 Auth::routes();
 
-// Route::group(['prefix' => 'admin-page','namespace' => 'AdminPage', 'middleware' => ['auth','role']],function (){
-//     Route::get('/admin_home', 'AdminController@AdminHome')->name('adminHome');
-//     Route::get('/all_users', 'AllUsersController@index')->name('allUsers');
-//     Route::get('/edit_user/{id}', 'AllUsersController@edit')->name('editUser');
-//     Route::put('/update_user/{id}', 'AllUsersController@update')->name('updateUser');
-//     Route::delete('/delete_user/{id}', 'AllUsersController@delete')->name('deleteUser');
-//     Route::resource('/a_post', 'AllPostsController')->except(['create','store']);
-//     Route::get('/tag_posts_admin/{id}', 'AllPostsController@TagPostsAdmin')->name('tagPostsAdmin');
-//     Route::get('/user_posts_admin/{id}', 'AllPostsController@UserPostsAdmin')->name('userPostsAdmin');
-//     Route::get('/all_comments', 'AllCommentsController@index')->name('allComments');
-//     Route::get('/all_sub_comments/{id}', 'AllCommentsController@AllSubComments')->name('allSubComments');
-//     Route::delete('/delete_comment/{id}', 'AllCommentsController@DeleteComment')->name('deleteComment');
-//     Route::get('/admin_comments/{id}', 'AllCommentsController@AdminComments')->name('adminComments');
-// });
-
-// Route::middleware('auth:web')->group(function () {
-  
-   
-//     Route::resource('/post','PostController');
-//     Route::resource('/category','CategoryController')->except(['show']);
-   
-// });
-// Route::get('/profile', 'AuthController@profile');
-
-
-
-// Route::get('/profile', 'ProfileController@index');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

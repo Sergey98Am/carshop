@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->string('gender');
             $table->string('password');
             $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->unsignedBigInteger('role_id')->default(1);
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

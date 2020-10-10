@@ -17,4 +17,8 @@ class Order extends Model
     public function transaction(){
         return $this->hasOne('App\Models\Transaction');
     }
+
+    public function status(){
+        return $this->hasOne('App\Models\Status');
+    }
 }

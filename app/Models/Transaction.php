@@ -15,6 +15,10 @@ class Transaction extends Model
         'currency',
         'status',
         'order_id',
-        'user_id'
+        'user_id',
     ];
+
+    public function order(){
+        return $this->belongsTo('App\Models\Transaction');
+    }
 }
