@@ -24,8 +24,8 @@ class ShopCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:2|max:255',
-            'user_id' => 'exists:users,id'
+            'name' => ['required','regex:/^.*[A-Za-z].*/u'],
+            'user_id' => ['exists:users,id'],
         ];
     }
 }

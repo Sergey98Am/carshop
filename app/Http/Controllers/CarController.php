@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\ShopOwnerPage;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CarImageUploadRequest;
 use App\Http\Requests\CarCreateRequest;
 use App\Http\Requests\CarUpdateRequest;

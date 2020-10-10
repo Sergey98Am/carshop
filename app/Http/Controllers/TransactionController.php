@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\TransactionRequest;
-use App\Models\Transaction;
 use Stripe;
+use App\Models\Transaction;
 use App\Models\Order;
 use JWTAuth;
 
 class TransactionController extends Controller
 {
-    public function checkout(TransactionRequest $request, $id) {
+    public function checkout(TransactionRequest $request, $id)
+    {
         try {
             $order = Order::find($id);
 
@@ -20,6 +21,7 @@ class TransactionController extends Controller
 
                 $token = $stripe->tokens->create([
                     'card' => [
+                        'name' => $request->name,
                         'number' => $request->number,
                         'exp_month' => $request->exp_month,
                         'exp_year' => $request->exp_year,
@@ -50,7 +52,7 @@ class TransactionController extends Controller
                     'currency' => $request->currency,
                     'status' => 'Purchased',
                     'order_id' => $order->id,
-                    'user_id' => JWTAuth::user()->id
+                    'user_id' => JWTAuth::user()->id,
                 ]);
 
                 if ($transaction) {
@@ -64,23 +66,23 @@ class TransactionController extends Controller
                         'customer' => $customer
                     ], 200);
                 } else {
-                    return response()->json([
-                        'error' => 'Something went wrong'
-                    ], 400);
+                    throw new \Exception('Something went wrong');
                 }
             } else {
-                return response()->json([
-                    'error' => 'Order does not exists'
-                ], 400);
+                throw new \Exception('Order does not exist');
             }
-        } catch (Stripe\Exception\ApiErrorException $e) {
-            return response()->json(['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 
-    public function cancelTransaction($id){
+    public function cancelTransaction($id)
+    {
         try {
             $order = Order::with('transaction')->find($id);
+
             if ($order && $order->transaction) {
                 $stripe = new \Stripe\StripeClient(
                     config('services.stripe.secret')
@@ -102,12 +104,12 @@ class TransactionController extends Controller
                     'cancel' => $cancel,
                 ], 200);
             } else {
-                return response()->json([
-                    'error' => 'Order does not exists'
-                ], 400);
+                throw new \Exception('Order does not exist');
             }
-        } catch (Stripe\Exception\ApiErrorException $e) {
-            return response()->json(['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 400);
         }
     }
 }

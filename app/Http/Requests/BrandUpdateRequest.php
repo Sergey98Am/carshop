@@ -25,7 +25,7 @@ class BrandUpdateRequest extends FormRequest
     {
         $id = $this->request->get('id');
         return [
-            'name' => 'required|min:2|max:255|unique:brands,name,'.$id
+            'name' => ['required','regex:/^.*[A-Za-z].*/u','unique:brands,name,'.$id],
         ];
     }
 }

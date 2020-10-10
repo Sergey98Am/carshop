@@ -25,16 +25,16 @@ class CarUpdateRequest extends FormRequest
     {
 
         return [
-            'name' => 'required|min:2|max:255',
-            'price' => 'required',
-            'condition' => 'required',
-            'year' => 'required',
-            'color' => 'required',
-            'speed' => 'required',
-            'shop_id' => 'exists:shops,id',
-            'category_id' => 'exists:categories,id',
-            'brand_id' => 'exists:brands,id',
-            'user_id' => 'exists:users,id'
+            'name' => ['required','regex:/^.*[A-Za-z].*/u'],
+            'price' => ['required','numeric'],
+            'condition' => ['required','alpha'],
+            'year' => ['required','numeric'],
+            'color' => ['required','regex:/^[\pL\s\-]+$/u'],
+            'speed' => ['required','numeric'],
+            'shop_id' => ['exists:shops,id'],
+            'category_id' => ['exists:categories,id'],
+            'brand_id' => ['exists:brands,id'],
+            'user_id' => ['exists:users,id'],
         ];
     }
 }

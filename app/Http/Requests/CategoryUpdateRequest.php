@@ -25,7 +25,7 @@ class CategoryUpdateRequest extends FormRequest
     {
         $id = $this->request->get('id');
         return [
-            'name' => 'required|min:2|max:255|unique:categories,name,'.$id
+            'name' => ['required','regex:/^[\pL\s\-]+$/u','unique:categories,name,'.$id]
         ];
     }
 }
