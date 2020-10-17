@@ -14,63 +14,63 @@ class TransactionController extends Controller
         try {
             $order = Order::find($id);
 
-            if ($order) {
-                $stripe = new \Stripe\StripeClient(
-                    config('services.stripe.secret')
-                );
-
-                $token = $stripe->tokens->create([
-                    'card' => [
-                        'name' => $request->name,
-                        'number' => $request->number,
-                        'exp_month' => $request->exp_month,
-                        'exp_year' => $request->exp_year,
-                        'cvc' => $request->cvc,
-                        'address_country' => $request->country,
-                        'address_city' => $request->city,
-                    ],
-                ]);
-
-                $customer = $stripe->customers->create([
-                    'phone' => $request->phone,
-                    'source' => $token->id
-                ]);
-
-                $charge = $stripe->charges->create([
-                    'customer' => $customer->id,
-                    'amount' => ($order->item_price * 100) * $order->quantity,
-                    'currency' => $request->currency,
-                ]);
-
-                //Create transaction
-                $transaction = Transaction::create([
-                    'transaction_id' => $charge->id,
-                    'country' => $request->country,
-                    'city' => $request->city,
-                    'phone' => $request->phone,
-                    'amount' => $order->item_price * $order->quantity,
-                    'currency' => $request->currency,
-                    'status' => 'Purchased',
-                    'order_id' => $order->id,
-                    'user_id' => JWTAuth::user()->id,
-                ]);
-
-                if ($transaction) {
-                    $order->update([
-                       'status_id' => 3
-                    ]);
-
-                    return response()->json([
-                        'message' => 'Transaction successfully created',
-                        'charge' => $charge,
-                        'customer' => $customer
-                    ], 200);
-                } else {
-                    throw new \Exception('Something went wrong');
-                }
-            } else {
+            if (!$order) {
                 throw new \Exception('Order does not exist');
             }
+            $stripe = new \Stripe\StripeClient(
+                config('services.stripe.secret')
+            );
+
+            $token = $stripe->tokens->create([
+                'card' => [
+                    'name' => $request->name,
+                    'number' => $request->number,
+                    'exp_month' => $request->exp_month,
+                    'exp_year' => $request->exp_year,
+                    'cvc' => $request->cvc,
+                    'address_country' => $request->country,
+                    'address_city' => $request->city,
+                ],
+            ]);
+
+            $customer = $stripe->customers->create([
+                'phone' => $request->phone,
+                'source' => $token->id
+            ]);
+
+            $charge = $stripe->charges->create([
+                'customer' => $customer->id,
+                'amount' => ($order->item_price * 100) * $order->quantity,
+                'currency' => $request->currency,
+            ]);
+
+            //Create transaction
+            $transaction = Transaction::create([
+                'transaction_id' => $charge->id,
+                'country' => $request->country,
+                'city' => $request->city,
+                'phone' => $request->phone,
+                'amount' => $order->item_price * $order->quantity,
+                'currency' => $request->currency,
+                'status' => 'Purchased',
+                'order_id' => $order->id,
+                'user_id' => JWTAuth::user()->id,
+            ]);
+
+            if (!$transaction) {
+                throw new \Exception('Something went wrong');
+            }
+            $order->update([
+                'status_id' => 3
+            ]);
+
+            return response()->json([
+                'message' => 'Transaction successfully created',
+                'charge' => $charge,
+                'customer' => $customer
+            ], 200);
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
