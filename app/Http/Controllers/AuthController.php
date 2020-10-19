@@ -72,6 +72,12 @@ class AuthController extends Controller
         }
     }
 
+    public function profile() {
+        return response()->json([
+            'user' => JWTAuth::user()->with('country')->first()
+        ]);
+    }
+
     protected function respondWithToken($token)
     {
         return response()->json([

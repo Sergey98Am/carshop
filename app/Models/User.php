@@ -64,6 +64,20 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Models\Transaction');
     }
 
+    public function getFullNameAttribute() {
+        return ucwords($this->first_name.' '.$this->last_name);
+    }
+
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->attributes['date_of_birth'])->age;
+    }
+
+    protected $appends = [
+        'full_name',
+        'age',
+    ];
+
     // Rest omitted for brevity
 
     /**
