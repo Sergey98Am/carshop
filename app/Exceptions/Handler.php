@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Illuminate\Validation\ValidationException;
+use Tymon\JWTAuth\JWTAuth;
 
 class Handler extends ExceptionHandler
 {
@@ -62,6 +63,7 @@ class Handler extends ExceptionHandler
             ],400);
         }
         elseif ($exception instanceOf TokenExpiredException) {
+            $newToken = JWTAuth::parseToken()->refresh();
             return response()->json([
                 'error' => 'Token is Expired'
             ],400);

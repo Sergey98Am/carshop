@@ -22,6 +22,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/brands','BrandController@index');
     });
 
+    Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');
     Route::get('/cars','CarController@index');
     Route::get('/cars-shop/{id}','CarController@carsShop');
