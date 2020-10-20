@@ -44,8 +44,12 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
 
             if ($token = JWTAuth::attempt($credentials)) {
+                if ($request->rememberMe) {
+                    config(['jwt.ttl' => env('JWT_TTL',  86400 * 30)]);
+                }
                 return response()->json([
-                    'token' => $token
+                    'token' => $token,
+                    'rememberMe' => config('jwt.ttl')
                 ], 200);
             } else {
                 throw new \Exception('Unauthorized');
