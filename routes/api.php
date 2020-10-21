@@ -6,6 +6,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', 'AuthController@register');
     Route::post('/login', 'AuthController@login');
 });
+Route::get('/countries','AuthController@countries');
 
 Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['role']],function (){

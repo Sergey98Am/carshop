@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -79,6 +80,12 @@ class AuthController extends Controller
     public function profile() {
         return response()->json([
             'user' => JWTAuth::user()->with('country')->first()
+        ]);
+    }
+
+    public function countries() {
+        return response()->json([
+            'countries' => Country::all()
         ]);
     }
 
