@@ -25,6 +25,9 @@ class AuthController extends Controller
             ]);
 
             if ($user) {
+                if ($request->rememberMe) {
+                    config(['jwt.ttl' => env('JWT_TTL',  86400 * 30)]);
+                }
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
                     'token' => $token
