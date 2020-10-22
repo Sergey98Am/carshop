@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
             'first_name' => ['required','regex:/^[\pL\s\-]+$/u'],
             'last_name' => ['required','regex:/^[\pL\s\-]+$/u'],
             'email' => ['required','email','unique:users'],
-            'date_of_birth' => ['required'],
+            'date_of_birth' => ['required','date','date_format:Y-m-d','after:1909-12-31'],
             'gender' => ['required','alpha'],
             'country_id' => ['exists:countries,id'],
             'password' => ['required','string','min:8','confirmed'],
