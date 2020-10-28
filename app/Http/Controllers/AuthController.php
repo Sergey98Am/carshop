@@ -31,7 +31,7 @@ class AuthController extends Controller
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
                     'token' => $token,
-                    'user' => JWTAuth::user(),
+                    'user' => $user,
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
