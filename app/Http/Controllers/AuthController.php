@@ -30,7 +30,8 @@ class AuthController extends Controller
                 }
                 $token = JWTAuth::fromUser($user);
                 return response()->json([
-                    'token' => $token
+                    'token' => $token,
+                    'user' => JWTAuth::user(),
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
@@ -53,6 +54,7 @@ class AuthController extends Controller
                 }
                 return response()->json([
                     'token' => $token,
+                    'user' => JWTAuth::user(),
                     'rememberMe' => config('jwt.ttl')
                 ], 200);
             } else {
