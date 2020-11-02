@@ -11,6 +11,18 @@ use JWTAuth;
 
 class AuthController extends Controller
 {
+    public function checkToken() {
+        try {
+            return response()->json([
+                'success' => true,
+            ], 200);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function register(RegisterRequest $request)
     {
         try {
@@ -25,13 +37,16 @@ class AuthController extends Controller
             ]);
 
             if ($user) {
-                if ($request->rememberMe) {
-                    config(['jwt.ttl' => env('JWT_TTL',  86400 * 30)]);
-                }
                 $token = JWTAuth::fromUser($user);
+
+                if ($request->rememberMe) {
+                    $token = auth()->setTTL(86400 * 30)->fromUser($user);
+                }
+
                 return response()->json([
                     'token' => $token,
                     'user' => $user,
+                    'ttl' => auth()->factory()->getTTL(),
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
@@ -48,14 +63,16 @@ class AuthController extends Controller
         try {
             $credentials = $request->only('email', 'password');
 
-            if ($token = JWTAuth::attempt($credentials)) {
-                if ($request->rememberMe) {
-                    config(['jwt.ttl' => env('JWT_TTL',  86400 * 30)]);
-                }
+            $token = JWTAuth::attempt($credentials);
+
+            if ($request->rememberMe) {
+                $token = auth()->setTTL(86400 * 30)->attempt($credentials);
+            }
+
+            if ($token) {
                 return response()->json([
                     'token' => $token,
                     'user' => JWTAuth::user(),
-                    'rememberMe' => config('jwt.ttl')
                 ], 200);
             } else {
                 throw new \Exception('Unauthorized');
@@ -99,7 +116,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => auth()->factory()->getTTL(),
         ]);
     }
 }

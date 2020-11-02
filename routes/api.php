@@ -23,6 +23,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/brands','BrandController@index');
     });
 
+    Route::post('/check-token','AuthController@checkToken');
     Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');
     Route::get('/cars','CarController@index');
