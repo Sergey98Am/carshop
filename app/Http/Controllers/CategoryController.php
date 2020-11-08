@@ -58,6 +58,31 @@ class CategoryController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit($id)
+    {
+        try {
+            $category = Category::find($id);
+
+            if ($category) {
+                return response()->json([
+                    'category' => $category
+                ], 200);
+            } else {
+                throw new \Exception('Category does not exist');
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
