@@ -24,7 +24,7 @@ class BrandCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required','regex:/^.*[A-Za-z].*/u','unique:brands,name'],
+            'name' => ['required','regex:/^[a-zA-Z]+(?:(-| )[a-zA-Z]+)*$/','unique:brands,name'],
         ];
     }
 }
