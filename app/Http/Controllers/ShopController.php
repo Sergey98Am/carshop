@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Models\User;
 use App\Models\Shop;
 use JWTAuth;
 
@@ -17,10 +18,14 @@ class ShopController extends Controller
     public function index()
     {
         try {
-            $shops = Shop::OrderBy('id', 'desc')->get();
+            $shops = User::with([
+                'shops' => function ($q) {
+                    $q->orderBy('id', 'desc');
+                }
+            ])->find(JWTAuth::user()->id);
 
             return response()->json([
-                'shops' => $shops
+                'shops' => $shops->shops
             ]);
         } catch(\Exception $e) {
             return response()->json([
@@ -49,6 +54,31 @@ class ShopController extends Controller
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit($id)
+    {
+        try {
+            $shop = Shop::find($id);
+
+            if ($shop) {
+                return response()->json([
+                    'shop' => $shop
+                ], 200);
+            } else {
+                throw new \Exception('Shop does not exist');
             }
         } catch(\Exception $e) {
             return response()->json([
