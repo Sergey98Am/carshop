@@ -24,7 +24,7 @@ class CategoryCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required','regex:/^[A-Za-z\s\-]+$/','unique:categories,name'],
+            'name' => ['required','regex:/^[A-Za-z\s]+$/','unique:categories,name'],
         ];
     }
 }
