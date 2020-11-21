@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Car extends Model
 {
     protected $fillable = [
+        'image',
         'name',
         'price',
         'condition',
@@ -20,6 +21,10 @@ class Car extends Model
 
     public function orders(){
         return $this->hasMany('App\Models\Order');
+    }
+
+    public function shop(){
+        return $this->belongsTo('App\Models\Shop');
     }
 
     public function category(){

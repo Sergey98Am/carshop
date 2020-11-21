@@ -6,6 +6,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Models\Country;
+use http\Env\Request;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
@@ -16,6 +17,32 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
             ], 200);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function login(LoginRequest $request)
+    {
+        try {
+            $credentials = $request->only('email', 'password');
+
+            $token = JWTAuth::attempt($credentials);
+
+            if ($request->rememberMe) {
+                $token = auth()->setTTL(86400 * 30)->attempt($credentials);
+            }
+
+            if ($token) {
+                return response()->json([
+                    'token' => $token,
+                    'user' => User::with('country')->find(JWTAuth::user()->id)
+                ], 200);
+            } else {
+                throw new \Exception('Unauthorized');
+            }
         } catch(\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -45,37 +72,11 @@ class AuthController extends Controller
 
                 return response()->json([
                     'token' => $token,
-                    'user' => $user,
+                    'user' => User::with('country')->find($user->id),
                     'ttl' => auth()->factory()->getTTL(),
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
-            }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    public function login(LoginRequest $request)
-    {
-        try {
-            $credentials = $request->only('email', 'password');
-
-            $token = JWTAuth::attempt($credentials);
-
-            if ($request->rememberMe) {
-                $token = auth()->setTTL(86400 * 30)->attempt($credentials);
-            }
-
-            if ($token) {
-                return response()->json([
-                    'token' => $token,
-                    'user' => JWTAuth::user(),
-                ], 200);
-            } else {
-                throw new \Exception('Unauthorized');
             }
         } catch(\Exception $e) {
             return response()->json([

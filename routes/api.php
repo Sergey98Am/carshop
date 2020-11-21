@@ -7,6 +7,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AuthController@login');
 });
 Route::get('/countries','AuthController@countries');
+Route::get('/cars/{id}','CarController@show');
 
 Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['role']],function (){
@@ -27,7 +28,7 @@ Route::middleware('jwt')->group(function () {
     Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');
     Route::get('/cars','CarController@index');
-    Route::get('/cars-shop/{id}','CarController@carsShop');
+    Route::get('/cars/shop/{id}','CarController@carsShop');
     Route::post('/checkout/{id}','TransactionController@checkout');
     Route::post('/cancel-order/{id}','OrderController@cancelOrder');
     Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
