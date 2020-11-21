@@ -25,6 +25,7 @@ class CarUpdateRequest extends FormRequest
     {
 
         return [
+            'image' => ['nullable','mimes:jpeg,jpg,png'],
             'name' => ['required','regex:/^.*[A-Za-z].*/u'],
             'price' => ['required','numeric'],
             'condition' => ['required','alpha'],
@@ -34,7 +35,6 @@ class CarUpdateRequest extends FormRequest
             'shop_id' => ['exists:shops,id'],
             'category_id' => ['exists:categories,id'],
             'brand_id' => ['exists:brands,id'],
-            'user_id' => ['exists:users,id'],
         ];
     }
 }
