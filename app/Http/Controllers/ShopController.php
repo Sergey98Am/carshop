@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\User;
@@ -15,19 +16,28 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $shops = User::with([
-                'shops' => function ($q) {
-                    $q->orderBy('id', 'desc');
-                }
-            ])->find(JWTAuth::user()->id);
+            if ($request->path() == 'api/shop-owner/shops') {
+                $shops = User::with([
+                    'shops' => function ($q) {
+                        $q->orderBy('id', 'desc');
+                    }
+                ])->find(JWTAuth::user()->id);
 
-            return response()->json([
-                'shops' => $shops->shops
-            ]);
-        } catch(\Exception $e) {
+                return response()->json([
+                    'shops' => $shops->shops
+                ]);
+            } elseif ($request->path() == 'api/admin/shops') {
+                $shops = Shop::orderBy('id', 'desc')->get();
+
+                return response()->json([
+                    'shops' => $shops
+                ]);
+            }
+
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -37,7 +47,7 @@ class ShopController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(ShopCreateRequest $request)
@@ -50,12 +60,13 @@ class ShopController extends Controller
 
             if ($shop) {
                 return response()->json([
+                    'shop' => $shop,
                     'message' => 'Shop successfully created'
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -80,7 +91,7 @@ class ShopController extends Controller
             } else {
                 throw new \Exception('Shop does not exist');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -90,8 +101,8 @@ class ShopController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Shop  $shop
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Shop $shop
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(ShopUpdateRequest $request, $id)
@@ -110,7 +121,7 @@ class ShopController extends Controller
             } else {
                 throw new \Exception('Shop does not exist');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -120,7 +131,7 @@ class ShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Shop  $shop
+     * @param \App\Shop $shop
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -136,7 +147,7 @@ class ShopController extends Controller
             } else {
                 throw new \Exception('Shop does not exist');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);

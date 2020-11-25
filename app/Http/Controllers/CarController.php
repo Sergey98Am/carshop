@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\JWT;
+use Illuminate\Http\Request;
 use App\Http\Requests\CarImageUploadRequest;
 use App\Http\Requests\CarCreateRequest;
 use App\Http\Requests\CarUpdateRequest;
-use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Shop;
@@ -20,18 +19,26 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $cars = Car::with('shop')->whereHas(
-                'shop', function ($q) {
-                    return $q->where('user_id',JWTAuth::user()->id);
+            if ($request->path() == 'api/shop-owner/cars') {
+                $cars = Car::with('shop')->whereHas(
+                    'shop', function ($q) {
+                    return $q->where('user_id', JWTAuth::user()->id);
                 }
-            )->orderBy('id','desc')->get();
+                )->orderBy('id', 'desc')->get();
 
-            return response()->json([
-                'cars' => $cars
-            ], 200);
+                return response()->json([
+                    'cars' => $cars
+                ], 200);
+            } elseif ($request->path() == 'api/admin/cars') {
+                $cars = Car::with('shop')->orderBy('id', 'desc')->get();
+
+                return response()->json([
+                    'cars' => $cars
+                ], 200);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
