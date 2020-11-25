@@ -7,13 +7,15 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AuthController@login');
 });
 Route::get('/countries','AuthController@countries');
-Route::get('/cars/{id}','CarController@show');
+
 
 Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['role']],function (){
         Route::resource('/categories','CategoryController');
         Route::resource('/brands','BrandController');
         Route::get('/shops','ShopController@index');
+        Route::get('/cars','CarController@index');
+        Route::get('/cars/{id}','CarController@show');
     });
 
     Route::group(['prefix' => 'shop-owner', 'middleware' => ['role-shop-owner']],function (){
@@ -27,7 +29,6 @@ Route::middleware('jwt')->group(function () {
     Route::post('/check-token','AuthController@checkToken');
     Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');
-    Route::get('/cars','CarController@index');
     Route::get('/cars/shop/{id}','CarController@carsShop');
     Route::post('/checkout/{id}','TransactionController@checkout');
     Route::post('/cancel-order/{id}','OrderController@cancelOrder');
@@ -36,4 +37,3 @@ Route::middleware('jwt')->group(function () {
     Route::resource('/transactions','TransactionController');
     Route::get('/logout', 'AuthController@logout');
 });
-
