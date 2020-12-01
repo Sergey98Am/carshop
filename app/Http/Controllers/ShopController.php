@@ -29,7 +29,7 @@ class ShopController extends Controller
                 return response()->json([
                     'shops' => $shops->shops
                 ]);
-            } elseif ($request->path() == 'api/admin/shops') {
+            } else {
                 $shops = Shop::orderBy('id', 'desc')->get();
 
                 return response()->json([

@@ -31,6 +31,7 @@ class CarCreateRequest extends FormRequest
             'year' => ['required','numeric','digits:4'],
             'color' => ['required','regex:/^[\pL\s\-]+$/u'],
             'speed' => ['required','numeric'],
+            'quantity' => ['required','numeric'],
             'shop_id' => ['exists:shops,id'],
             'category_id' => ['exists:categories,id'],
             'brand_id' => ['exists:brands,id'],

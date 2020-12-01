@@ -32,6 +32,7 @@ class CarUpdateRequest extends FormRequest
             'year' => ['required','numeric'],
             'color' => ['required','regex:/^[\pL\s\-]+$/u'],
             'speed' => ['required','numeric'],
+            'quantity' => ['required','numeric'],
             'shop_id' => ['exists:shops,id'],
             'category_id' => ['exists:categories,id'],
             'brand_id' => ['exists:brands,id'],
