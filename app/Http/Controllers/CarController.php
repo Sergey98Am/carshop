@@ -32,7 +32,7 @@ class CarController extends Controller
                 return response()->json([
                     'cars' => $cars
                 ], 200);
-            } elseif ($request->path() == 'api/admin/cars') {
+            } else {
                 $cars = Car::with('shop')->orderBy('id', 'desc')->get();
 
                 return response()->json([
@@ -92,6 +92,7 @@ class CarController extends Controller
                 'year' => $request->year,
                 'color' => $request->color,
                 'speed' => $request->speed,
+                'quantity' => $request->quantity,
                 'shop_id' => $request->shop_id,
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
@@ -196,6 +197,7 @@ class CarController extends Controller
                     'year' => $request->year,
                     'color' => $request->color,
                     'speed' => $request->speed,
+                    'quantity' => $request->quantity,
                     'category_id' => $request->category_id,
                     'brand_id' => $request->brand_id,
                 ]);

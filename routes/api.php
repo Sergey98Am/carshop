@@ -7,25 +7,25 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AuthController@login');
 });
 Route::get('/countries','AuthController@countries');
+Route::get('/categories','CategoryController@index');
+Route::get('/brands','BrandController@index');
+Route::get('/shops','ShopController@index');
+Route::get('/cars','CarController@index');
+Route::get('/cars/{id}','CarController@show');
+Route::get('/recommended','FrontController@recommended');
 
 
 Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'admin', 'middleware' => ['role']],function (){
         Route::resource('/categories','CategoryController');
         Route::resource('/brands','BrandController');
-        Route::get('/shops','ShopController@index');
-        Route::get('/cars','CarController@index');
-        Route::get('/cars/{id}','CarController@show');
     });
 
     Route::group(['prefix' => 'shop-owner', 'middleware' => ['role-shop-owner']],function (){
         Route::resource('/shops','ShopController');
         Route::resource('/cars','CarController');
         Route::post('/car-upload-image/{id}','CarController@uploadImage');
-        Route::get('/categories','CategoryController@index');
-        Route::get('/brands','BrandController@index');
     });
-
     Route::post('/check-token','AuthController@checkToken');
     Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');

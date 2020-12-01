@@ -14,6 +14,7 @@ class Car extends Model
         'year',
         'color',
         'speed',
+        'quantity',
         'shop_id',
         'category_id',
         'brand_id',

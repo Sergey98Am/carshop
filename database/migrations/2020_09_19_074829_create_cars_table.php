@@ -24,6 +24,7 @@ class CreateCarsTable extends Migration
     $table->integer('year');
     $table->string('color');
     $table->integer('speed');
+    $table->integer('quantity');
     $table->unsignedBigInteger('shop_id');
     $table->unsignedBigInteger('category_id');
     $table->unsignedBigInteger('brand_id');
