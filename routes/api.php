@@ -12,7 +12,7 @@ Route::get('/brands','BrandController@index');
 Route::get('/shops','ShopController@index');
 Route::get('/cars','CarController@index');
 Route::get('/cars/{id}','CarController@show');
-Route::get('/recommended','FrontController@recommended');
+Route::get('/recommended-cars','CarController@recommendedCars');
 
 
 Route::middleware('jwt')->group(function () {
@@ -24,7 +24,6 @@ Route::middleware('jwt')->group(function () {
     Route::group(['prefix' => 'shop-owner', 'middleware' => ['role-shop-owner']],function (){
         Route::resource('/shops','ShopController');
         Route::resource('/cars','CarController');
-        Route::post('/car-upload-image/{id}','CarController@uploadImage');
     });
     Route::post('/check-token','AuthController@checkToken');
     Route::get('/profile','AuthController@profile');
@@ -34,6 +33,7 @@ Route::middleware('jwt')->group(function () {
     Route::post('/cancel-order/{id}','OrderController@cancelOrder');
     Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
     Route::resource('/orders','OrderController');
+    Route::post('/orders','OrderController@add');
     Route::resource('/transactions','TransactionController');
     Route::get('/logout', 'AuthController@logout');
 });

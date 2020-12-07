@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OrderCreateRequest;
-use App\Http\Requests\OrderUpdateRequest;
+use App\Http\Requests\OrderRequest;
+use JWTAuth;
 use App\Models\Order;
 
 class OrderController extends Controller
@@ -16,73 +16,61 @@ class OrderController extends Controller
     public function index()
     {
         try {
-            $orders = Order::OrderBy('id', 'desc')->get();
+            $pendingOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 1)->get();
+            $canceledOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 2)->get();
+            $purchasedOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 3)->get();
 
             return response()->json([
-                'orders' => $orders
+                'pendingOrders' => $pendingOrders,
+                'canceledOrders' => $canceledOrders,
+                'purchasedOrders' => $purchasedOrders
             ], 200);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(OrderCreateRequest $request)
+    public function add(OrderRequest $request)
     {
         try {
-            $order = Order::create([
-                'quantity' => $request->quantity,
-                'item_price' => $request->item_price,
-                'car_id' => $request->car_id,
-                'user_id' => $request->user_id
-            ]);
+            $orders = Order::where('user_id', JWTAuth::user()->id)->where('status_id', 1)->get();
+            $a = true;
 
-            if ($order) {
-                return response()->json([
-                    'message' => 'Order successfully created'
-                ], 200);
-            } else {
-                throw new \Exception('Something went wrong');
+            foreach ($orders as $order) {
+                if ($order->car_id == $request->car_id) {
+                    $request->quantity = $order->quantity + $request->quantity;
+                    $order->update([
+                        'quantity' => $request->quantity,
+                        'total_price' => $request->item_price * $request->quantity,
+                    ]);
+                    $a = false;
+                    return response()->json([
+                        'message' => 'Order successfully updated'
+                    ], 200);
+
+                }
             }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-
-    public function update(OrderUpdateRequest $request, $id)
-    {
-        try {
-            $order = Order::find($id);
-
-            if ($order) {
-                $order->update([
+            if ($a) {
+                $order = Order::create([
                     'quantity' => $request->quantity,
                     'item_price' => $request->item_price,
+                    'total_price' => $request->item_price * $request->quantity,
+                    'car_id' => $request->car_id,
+                    'user_id' => JWTAuth::user()->id
                 ]);
-                return response()->json([
-                    'message' => 'Order successfully updated'
-                ], 200);
-            } else {
-                throw new \Exception('Order does not exist');
+
+                if ($order) {
+                    return response()->json([
+                        'message' => 'Order successfully created'
+                    ], 200);
+                } else {
+                    throw new \Exception('Something went wrong');
+                }
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
@@ -92,7 +80,7 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
@@ -109,14 +97,15 @@ class OrderController extends Controller
             } else {
                 throw new \Exception('Order does not exist');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 400);
         }
     }
 
-    public function cancelOrder($id){
+    public function cancelOrder($id)
+    {
         try {
             $order = Order::find($id);
 

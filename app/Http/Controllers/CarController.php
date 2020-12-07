@@ -46,6 +46,22 @@ class CarController extends Controller
         }
     }
 
+    public function recommendedCars()
+    {
+        try {
+            $recommendedCars = Car::inRandomOrder()->limit(10)->get();
+
+            return response()->json([
+                'recommendedCars' => $recommendedCars
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -232,34 +248,6 @@ class CarController extends Controller
                     'message' => 'Car successfully deleted'
                 ], 200);
 
-            } else {
-                throw new \Exception('Cars does not exist');
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    public function uploadImage(CarImageUploadRequest $request, $id)
-    {
-        try {
-            $car = Car::find($id);
-            if ($car) {
-                $file = $request->file('image');
-                $file_name = time() . $file->getClientOriginalName();
-                $file->move(public_path() . '/images/', $file_name);
-                $car->image = $file_name;
-
-                $car->update([
-                    'image' => $file_name
-                ]);
-                dd($request->file('image'));
-//                return response()->json([
-//                    'im' => $request->image,
-//                    'message' => 'Image successfully uploaded'
-//                ]);
             } else {
                 throw new \Exception('Cars does not exist');
             }
