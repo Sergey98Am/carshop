@@ -12,6 +12,7 @@ Route::get('/brands','BrandController@index');
 Route::get('/shops','ShopController@index');
 Route::get('/cars','CarController@index');
 Route::get('/cars/{id}','CarController@show');
+Route::get('/recommended-shops','ShopController@recommendedShops');
 Route::get('/recommended-cars','CarController@recommendedCars');
 
 
