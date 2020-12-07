@@ -44,6 +44,21 @@ class ShopController extends Controller
         }
     }
 
+    public function recommendedShops() {
+        try {
+            $recommendedShops = Shop::inRandomOrder()->limit(10)->get();
+
+            return response()->json([
+                'recommendedShops' => $recommendedShops
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
