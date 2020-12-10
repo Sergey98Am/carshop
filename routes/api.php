@@ -8,6 +8,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 Route::get('/countries','AuthController@countries');
 Route::get('/categories','CategoryController@index');
+Route::get('/limited-categories','CategoryController@limitedCategories');
 Route::get('/brands','BrandController@index');
 Route::get('/shops','ShopController@index');
 Route::get('/cars','CarController@index');

@@ -29,6 +29,20 @@ class CategoryController extends Controller
         }
     }
 
+    public function limitedCategories() {
+        try {
+            $limitedCategories = Category::OrderBy('id', 'desc')->limit(5)->get();
+
+            return response()->json([
+                'limitedCategories' => $limitedCategories
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -49,31 +63,6 @@ class CategoryController extends Controller
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
-            }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit($id)
-    {
-        try {
-            $category = Category::find($id);
-
-            if ($category) {
-                return response()->json([
-                    'category' => $category
-                ], 200);
-            } else {
-                throw new \Exception('Category does not exist');
             }
         } catch(\Exception $e) {
             return response()->json([
