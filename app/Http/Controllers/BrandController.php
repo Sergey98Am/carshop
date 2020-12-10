@@ -28,6 +28,20 @@ class BrandController extends Controller
         }
     }
 
+    public function limitedBrands() {
+        try {
+            $limitedBrands = Brand::OrderBy('id', 'desc')->limit(5)->get();
+
+            return response()->json([
+                'limitedBrands' => $limitedBrands
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -48,31 +62,6 @@ class BrandController extends Controller
                 ], 200);
             } else {
                 throw new \Exception('Something went wrong');
-            }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit($id)
-    {
-        try {
-            $brand = Brand::find($id);
-
-            if ($brand) {
-                return response()->json([
-                    'brand' => $brand
-                ], 200);
-            } else {
-                throw new \Exception('Brand does not exist');
             }
         } catch(\Exception $e) {
             return response()->json([
