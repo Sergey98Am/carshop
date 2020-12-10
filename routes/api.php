@@ -12,6 +12,7 @@ Route::get('/limited-categories','CategoryController@limitedCategories');
 Route::get('/brands','BrandController@index');
 Route::get('/limited-brands','BrandController@limitedBrands');
 Route::get('/shops','ShopController@index');
+Route::get('/limited-shops','ShopController@limitedShops');
 Route::get('/cars','CarController@index');
 Route::get('/cars/{id}','CarController@show');
 Route::get('/recommended-shops','ShopController@recommendedShops');
