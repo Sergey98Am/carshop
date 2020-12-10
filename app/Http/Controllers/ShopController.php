@@ -44,6 +44,20 @@ class ShopController extends Controller
         }
     }
 
+    public function limitedShops() {
+        try {
+            $limitedShops = Shop::OrderBy('id', 'desc')->limit(5)->get();
+
+            return response()->json([
+                'limitedShops' => $limitedShops
+            ]);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function recommendedShops() {
         try {
             $recommendedShops = Shop::inRandomOrder()->limit(10)->get();
