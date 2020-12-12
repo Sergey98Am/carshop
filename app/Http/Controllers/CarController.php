@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\CarImageUploadRequest;
 use App\Http\Requests\CarCreateRequest;
 use App\Http\Requests\CarUpdateRequest;
 use App\Models\Category;
@@ -22,18 +21,25 @@ class CarController extends Controller
     public function index(Request $request)
     {
         try {
+            $categories = Category::all();
+            $brands = Brand::all();
+            $shops = Shop::where('user_id', JWTAuth::user()->id)->get();
             if ($request->path() == 'api/shop-owner/cars') {
                 $cars = Car::with('shop')->whereHas(
                     'shop', function ($q) {
                     return $q->where('user_id', JWTAuth::user()->id);
                 }
-                )->orderBy('id', 'desc')->get();
+                )->with('shop', 'category', 'brand')->orderBy('id', 'desc')->get();
 
                 return response()->json([
+                    'categories' => $categories,
+                    'brands' => $brands,
+                    'shops' => $shops,
                     'cars' => $cars
                 ], 200);
             } else {
-                $cars = Car::with('shop')->orderBy('id', 'desc')->get();
+                $cars = Car::with('shop')->orderBy('id', 'desc')
+                    ->with('shop', 'category', 'brand')->get();
 
                 return response()->json([
                     'cars' => $cars
@@ -63,30 +69,6 @@ class CarController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create()
-    {
-        try {
-            $categories = Category::all();
-            $brands = Brand::all();
-            $shops = Shop::where('user_id',JWTAuth::user()->id)->get();
-
-            return response()->json([
-                'categories' => $categories,
-                'brands' => $brands,
-                'shops' => $shops,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -97,7 +79,7 @@ class CarController extends Controller
     {
         try {
             $file = $request->file('image');
-            $file_name = time().'_'.$file->getClientOriginalName();
+            $file_name = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path() . '/images/', $file_name);
 
             $car = Car::create([
@@ -129,62 +111,6 @@ class CarController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        try {
-            $car = Car::with('shop', 'category', 'brand')->find($id);
-
-            if ($car) {
-                return response()->json([
-                    'car' => $car
-                ], 200);
-            } else {
-                throw new \Exception('Car does not exist');
-            }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function edit($id)
-    {
-        try {
-            $categories = Category::all();
-            $brands = Brand::all();
-            $shops = Shop::where('user_id',JWTAuth::user()->id)->get();
-            $car = Car::find($id);
-
-            if ($car) {
-                return response()->json([
-                    'categories' => $categories,
-                    'brands' => $brands,
-                    'shops' => $shops,
-                    'car' => $car
-                ], 200);
-            } else {
-                throw new \Exception('Car does not exist');
-            }
-        } catch(\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -199,9 +125,9 @@ class CarController extends Controller
             if ($car) {
 
                 if ($request->hasFile('image')) {
-                    \File::delete(public_path().'/images/'.$car->image);
+                    \File::delete(public_path() . '/images/' . $car->image);
                     $file = $request->file('image');
-                    $file_name = time().'_'.$file->getClientOriginalName();
+                    $file_name = time() . '_' . $file->getClientOriginalName();
                     $file->move(public_path() . '/images/', $file_name);
                     $car->image = $file_name;
                 }
@@ -242,7 +168,7 @@ class CarController extends Controller
         try {
             $car = Car::find($id);
             if ($car) {
-                \File::delete(public_path().'/images/'.$car->image);
+                \File::delete(public_path() . '/images/' . $car->image);
                 $car->delete();
                 return response()->json([
                     'message' => 'Car successfully deleted'
