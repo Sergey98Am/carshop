@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
             RolesTableSeeder::class,
             UsersTableSeeder::class,
             CategoriesTableSeeder::class,
+            BrandsTableSeeder::class,
+            ShopsTableSeeder::class,
             StatusesTableSeeder::class,
+            CarsTableSeeder::class,
         ]);
     }
 }
