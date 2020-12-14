@@ -21,10 +21,10 @@ class CarController extends Controller
     public function index(Request $request)
     {
         try {
-            $categories = Category::all();
-            $brands = Brand::all();
-            $shops = Shop::where('user_id', JWTAuth::user()->id)->get();
-            if ($request->path() == 'api/shop-owner/cars') {
+            if ($request->path() === 'api/shop-owner/cars') {
+                $categories = Category::all();
+                $brands = Brand::all();
+                $shops = Shop::where('user_id', JWTAuth::user()->id)->get();
                 $cars = Car::with('shop')->whereHas(
                     'shop', function ($q) {
                     return $q->where('user_id', JWTAuth::user()->id);

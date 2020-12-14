@@ -4,6 +4,7 @@
 
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Country;
 
@@ -28,7 +29,7 @@ $factory->define(User::class, function (Faker $faker) {
         'date_of_birth' => $faker->dateTimeThisCentury()->format('Y-m-d'),
         'gender' => $gender,
         'country_id' => Country::all()->random()->id,
+        'role_id' => Role::where('id', '!=', 3)->get()->random()->id,
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
     ];
 });
