@@ -7,6 +7,6 @@ use App\Models\Brand;
 
 $factory->define(Brand::class, function (Faker $faker) {
     return [
-        'name' => $faker->word,
+        'name' => $faker->unique()->word,
     ];
 });

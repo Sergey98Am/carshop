@@ -31,7 +31,7 @@ class CategoryController extends Controller
 
     public function limitedCategories() {
         try {
-            $limitedCategories = Category::OrderBy('id', 'desc')->limit(5)->get();
+            $limitedCategories = Category::OrderBy('id', 'desc')->limit(10)->get();
 
             return response()->json([
                 'limitedCategories' => $limitedCategories

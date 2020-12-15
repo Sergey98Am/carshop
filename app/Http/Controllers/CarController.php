@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Shop;
 use App\Models\Car;
 use JWTAuth;
+use SebastianBergmann\CodeCoverage\TestFixture\C;
 
 class CarController extends Controller
 {
@@ -111,6 +112,31 @@ class CarController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        try {
+            $car = Car::with('shop', 'category', 'brand')->find($id);
+
+            if ($car) {
+                return response()->json([
+                    'car' => $car
+                ], 200);
+            } else {
+                throw new \Exception('Car does not exist');
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -184,14 +210,50 @@ class CarController extends Controller
         }
     }
 
-    public function carsShop($id)
+    public function categoryCars($id) {
+        try {
+            $carsOfCategory = Category::with('cars')->find($id);
+
+            if ($carsOfCategory) {
+                return response()->json([
+                    'carsOfCategory' => $carsOfCategory
+                ], 200);
+            } else {
+                throw new \Exception('Cars does not exist');
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function brandCars($id) {
+        try {
+            $carsOfBrand = Brand::with('cars')->find($id);
+
+            if ($carsOfBrand) {
+                return response()->json([
+                    'carsOfBrand' => $carsOfBrand
+                ], 200);
+            } else {
+                throw new \Exception('Cars does not exist');
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function shopCars($id)
     {
         try {
-            $shop = Shop::with('cars')->find($id);
+            $carsOfShop = Shop::with('cars')->find($id);
 
-            if ($shop) {
+            if ($carsOfShop) {
                 return response()->json([
-                    'cars' => $shop->cars
+                    'carsOfShop' => $carsOfShop
                 ], 200);
             } else {
                 throw new \Exception('Cars does not exist');

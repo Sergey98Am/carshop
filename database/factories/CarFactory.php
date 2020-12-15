@@ -12,7 +12,7 @@ use App\Models\Brand;
 $factory->define(Car::class, function (Faker $faker) {
     return [
         'image' => 'mercedes.jpg',
-        'name' => $faker->sentence(2),
+        'name' => $faker->word,
         'price' => $faker->numberBetween($min = 2000, $max = 90000),
         'condition' => $faker->randomElement(['New', 'Old']),
         'year' => $faker->year,
