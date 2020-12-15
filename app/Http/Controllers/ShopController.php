@@ -20,14 +20,16 @@ class ShopController extends Controller
     {
         try {
             if ($request->path() == 'api/shop-owner/shops') {
-                $shops = User::with([
-                    'shops' => function ($q) {
-                        $q->orderBy('id', 'desc');
-                    }
-                ])->find(JWTAuth::user()->id);
+//                $shops = User::with([
+//                    'shops' => function ($q) {
+//                        $q->orderBy('id', 'desc');
+//                    }
+//                ])->find(JWTAuth::user()->id);
+                $shops = Shop::where('user_id', JWTAuth::user()->id)->get();
 
                 return response()->json([
-                    'shops' => $shops->shops
+//                    'shops' => $shops->shops
+                    'shops' => $shops
                 ]);
             } else {
                 $shops = Shop::orderBy('id', 'desc')->get();
@@ -46,7 +48,7 @@ class ShopController extends Controller
 
     public function limitedShops() {
         try {
-            $limitedShops = Shop::OrderBy('id', 'desc')->limit(5)->get();
+            $limitedShops = Shop::OrderBy('id', 'desc')->limit(10)->get();
 
             return response()->json([
                 'limitedShops' => $limitedShops

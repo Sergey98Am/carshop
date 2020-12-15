@@ -30,7 +30,7 @@ class BrandController extends Controller
 
     public function limitedBrands() {
         try {
-            $limitedBrands = Brand::OrderBy('id', 'desc')->limit(5)->get();
+            $limitedBrands = Brand::OrderBy('id', 'desc')->limit(10)->get();
 
             return response()->json([
                 'limitedBrands' => $limitedBrands

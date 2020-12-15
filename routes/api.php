@@ -8,15 +8,18 @@ Route::group(['prefix' => 'auth'], function () {
 });
 Route::get('/countries','AuthController@countries');
 Route::get('/categories','CategoryController@index');
-Route::get('/limited-categories','CategoryController@limitedCategories');
 Route::get('/brands','BrandController@index');
-Route::get('/limited-brands','BrandController@limitedBrands');
 Route::get('/shops','ShopController@index');
+Route::get('/limited-categories','CategoryController@limitedCategories');
+Route::get('/limited-brands','BrandController@limitedBrands');
 Route::get('/limited-shops','ShopController@limitedShops');
-Route::get('/cars','CarController@index');
-Route::get('/cars/{id}','CarController@show');
 Route::get('/recommended-shops','ShopController@recommendedShops');
 Route::get('/recommended-cars','CarController@recommendedCars');
+Route::get('/cars','CarController@index');
+Route::get('/cars/{id}','CarController@show');
+Route::get('categories/{id}/cars','CarController@categoryCars');
+Route::get('brands/{id}/cars','CarController@brandCars');
+Route::get('/shops/{id}/cars','CarController@shopCars');
 
 
 Route::middleware('jwt')->group(function () {
@@ -32,7 +35,6 @@ Route::middleware('jwt')->group(function () {
     Route::post('/check-token','AuthController@checkToken');
     Route::get('/profile','AuthController@profile');
     Route::get('/search','CarController@search');
-    Route::get('/cars/shop/{id}','CarController@carsShop');
     Route::post('/checkout/{id}','TransactionController@checkout');
     Route::post('/cancel-order/{id}','OrderController@cancelOrder');
     Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
