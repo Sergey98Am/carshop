@@ -39,6 +39,9 @@ Route::middleware('jwt')->group(function () {
     Route::post('/cancel-order/{id}','OrderController@cancelOrder');
     Route::post('/cancel-transaction/{id}','TransactionController@cancelTransaction');
     Route::resource('/orders','OrderController');
+    Route::get('/pending-orders','OrderController@pendingOrders');
+    Route::get('/purchased-orders','OrderController@purchasedOrders');
+    Route::get('/canceled-orders','OrderController@canceledOrders');
     Route::post('/orders','OrderController@add');
     Route::resource('/transactions','TransactionController');
     Route::get('/logout', 'AuthController@logout');
