@@ -17,11 +17,11 @@ class StatusesTableSeeder extends Seeder
                 'name' => 'Pending',
             ],
             [
-                'name' => 'Canceled'
+                'name' => 'Purchased'
             ],
             [
-                'name' => 'Purchased'
-            ]
+                'name' => 'Canceled'
+            ],
         ];
 
         Status::insert($statuses);

@@ -8,22 +8,52 @@ use App\Models\Order;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index()
+    public function pendingOrders()
     {
         try {
-            $pendingOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 1)->get();
-            $canceledOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 2)->get();
-            $purchasedOrders = Order::OrderBy('id', 'desc')->where('user_id', JWTAuth::user()->id)->where('status_id', 3)->get();
+            $pendingOrders = Order::OrderBy('id', 'desc')
+                ->with('Car')
+                ->where('user_id', JWTAuth::user()->id)
+                ->where('status_id', 1)->get();
 
             return response()->json([
-                'pendingOrders' => $pendingOrders,
-                'canceledOrders' => $canceledOrders,
+                'pendingOrders' => $pendingOrders
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function purchasedOrders()
+    {
+        try {
+            $purchasedOrders = Order::OrderBy('id', 'desc')
+                ->with('Car')
+                ->where('user_id', JWTAuth::user()->id)
+                ->where('status_id', 2)->get();
+
+            return response()->json([
                 'purchasedOrders' => $purchasedOrders
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function canceledOrders()
+    {
+        try {
+            $canceledOrders = Order::OrderBy('id', 'desc')
+                ->with('Car')
+                ->where('user_id', JWTAuth::user()->id)
+                ->where('status_id', 3)->get();
+
+            return response()->json([
+                'canceledOrders' => $canceledOrders
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -69,6 +99,36 @@ class OrderController extends Controller
                 } else {
                     throw new \Exception('Something went wrong');
                 }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(OrderRequest $request, $id)
+    {
+        try {
+            $order = Order::find($id);
+
+            if ($order) {
+                $order->update([
+                    'quantity' => $request->quantity,
+                    'total_price' => $order->item_price * $request->quantity
+                ]);
+                return response()->json([
+                    'message' => 'Order successfully updated'
+                ], 200);
+            } else {
+                throw new \Exception('Order does not exist');
             }
         } catch (\Exception $e) {
             return response()->json([
